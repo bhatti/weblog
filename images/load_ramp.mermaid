@@ -1,0 +1,18 @@
+flowchart LR
+    classDef warmup   fill:#00695C,color:#ffffff,stroke:#004D40,stroke-width:2px
+    classDef baseline fill:#0277BD,color:#ffffff,stroke:#01579B,stroke-width:2px
+    classDef avg      fill:#2E7D32,color:#ffffff,stroke:#1B5E20,stroke-width:2px
+    classDef peak     fill:#E65100,color:#ffffff,stroke:#BF360C,stroke-width:2px
+    classDef stress   fill:#B71C1C,color:#ffffff,stroke:#7F0000,stroke-width:2px
+    classDef spike    fill:#4527A0,color:#ffffff,stroke:#311B92,stroke-width:2px
+    classDef rampdown fill:#1565C0,color:#ffffff,stroke:#0D47A1,stroke-width:2px
+
+    W["Phase 1 Warmup 10–15% of peak Init connections warm caches"]:::warmup
+    B["Phase 2 Baseline 25–50% of peak Establish healthy performance baseline"]:::baseline
+    A["Phase 3 Average Load ~50% of peak Normal operating behavior"]:::avg
+    P["Phase 4 Peak Load 100% of peak Validate capacity targets"]:::peak
+    S["Phase 5 Stress Load 150–300% of peak Find the degradation point"]:::stress
+    SP["Phase 6 Spike Abrupt surge Test sudden burst & recovery"]:::spike
+    D["Phase 7 Ramp Down Return to baseline Validate resource recovery"]:::rampdown
+
+    W --> B --> A --> P --> S --> SP --> D

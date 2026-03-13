@@ -1,0 +1,17 @@
+flowchart LR
+    classDef dev    fill:#1565C0,color:#ffffff,stroke:#0D47A1,stroke-width:2px
+    classDef ci     fill:#2E7D32,color:#ffffff,stroke:#1B5E20,stroke-width:2px
+    classDef rel    fill:#E65100,color:#ffffff,stroke:#BF360C,stroke-width:2px
+    classDef prod   fill:#4527A0,color:#ffffff,stroke:#311B92,stroke-width:2px
+    classDef dep    fill:#00695C,color:#ffffff,stroke:#004D40,stroke-width:2px
+
+    DEV["🔍 Development Profiling · Benchmarks Regression checks"]:::dev
+    PR["🔎 Code Review Flag perf-sensitive changes for testing"]:::dev
+    CI["⚙️ CI/CD Pipeline Automated load tests Threshold gates"]:::ci
+    SCHED["📅 Regular Cadence Weekly full-scale tests Catch gradual regressions"]:::ci
+    DEP["📦 Dependency Upgrades Dedicated perf pass Runtime · Library · Infra"]:::dep
+    REL["🚀 Pre-Release Comprehensive suite All scenarios"]:::rel
+    PROD["📡 Production Canary monitoring Ongoing trend tracking"]:::prod
+
+    DEV --> PR --> CI --> SCHED --> REL --> PROD
+    DEP --> REL
