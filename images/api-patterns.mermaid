@@ -1,0 +1,51 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1565C0', 'primaryTextColor': '#FFFFFF', 'primaryBorderColor': '#0D47A1', 'lineColor': '#FFAB00', 'secondaryColor': '#2E7D32', 'tertiaryColor': '#B71C1C', 'background': '#263238', 'mainBkg': '#1565C0', 'nodeBorder': '#0D47A1', 'clusterBkg': '#1A237E', 'titleColor': '#FFFFFF', 'edgeLabelBackground': '#37474F'}}}%%
+flowchart TD
+    CLIENT([🖥 Client]) --> PREAUTH
+
+    subgraph INGRESS ["⬛  INGRESS LAYER"]
+        PREAUTH["🔴 Pre-Auth Throttle\n#30 Missing pre-auth throttling"]
+        AUTH["🟡 Auth & AuthZ\n#39 Caching without auth context"]
+        VALIDATE["🔴 Boundary Validation\n#8 No validation · #48 No spec enforcement\n#49 PII in requests"]
+    end
+
+    subgraph DESIGN ["⬛  DESIGN LAYER"]
+        SPEC["🔴 Spec-First?\n#41 Bottom-up annotation design\n#43 URI / namespace chaos"]
+        SURFACE["🟡 API Surface\n#42 Bloated non-composable surface\n#44 Bag-of-params / execute"]
+        PROTO["🟡 Protocol Choice\n#45 NIH custom RPC\n#47 JSON vs binary\n#46 Streaming misuse"]
+    end
+
+    subgraph BUSINESS ["⬛  BUSINESS LOGIC"]
+        IDEMPOTENT["🔴 Idempotency Check\n#16 Fake idempotency · #17 Missing token"]
+        TXBOUNDARY["🔴 Transaction Boundary\n#18 Tx violations · #20 No optimistic lock"]
+        PROCESS["🟡 Core Processing\n#9 N+1 / ORM · #13 Chatty deps"]
+    end
+
+    subgraph RESPONSE ["⬛  RESPONSE LAYER"]
+        PAGINATE["🟡 Pagination\n#10 Unbounded · #11 Opaque token missing"]
+        ERROR["🔴 Error Formation\n#22 Opaque · #24 Leaking info · #25 Splitting"]
+        PII_OUT["🔴 PII Scrubbing\n#49 PII leaking in responses"]
+    end
+
+    subgraph OPS ["⬛  RUNTIME & OPS"]
+        RETRY["🔴 Client Retry\n#26 No retry safety · #27 Storms"]
+        DEPLOY["🟡 Deployment\n#35 No phased rollout · #33 No red button"]
+        CONTRACT["🟡 Contract Tests\n#50 Missing contract testing"]
+    end
+
+    PREAUTH --> AUTH --> VALIDATE
+    VALIDATE --> IDEMPOTENT --> TXBOUNDARY --> PROCESS
+    PROCESS --> PAGINATE --> ERROR --> PII_OUT --> CLIENT
+    PII_OUT -->|network timeout| RETRY
+    DEPLOY -.->|gates traffic| INGRESS
+    CONTRACT -.->|verifies| DESIGN
+    SPEC --> SURFACE --> PROTO
+
+    classDef danger fill:#B71C1C,color:#FFFFFF,stroke:#7F0000,stroke-width:2px
+    classDef warn fill:#E65100,color:#FFFFFF,stroke:#BF360C,stroke-width:2px
+    classDef safe fill:#1B5E20,color:#FFFFFF,stroke:#003300,stroke-width:2px
+    classDef layer fill:#1A237E,color:#FFFFFF,stroke:#0D47A1,stroke-width:1px
+
+    class PREAUTH,VALIDATE,IDEMPOTENT,TXBOUNDARY,RETRY,ERROR,PII_OUT,SPEC danger
+    class PROCESS,PAGINATE,SURFACE,PROTO,DEPLOY,CONTRACT warn
+    class AUTH safe
+    class INGRESS,DESIGN,BUSINESS,RESPONSE,OPS layer
