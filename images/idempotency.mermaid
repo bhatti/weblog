@@ -1,0 +1,28 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1565C0', 'primaryTextColor': '#FFFFFF', 'primaryBorderColor': '#0D47A1', 'lineColor': '#FFAB00', 'secondaryColor': '#2E7D32', 'tertiaryColor': '#B71C1C', 'background': '#263238', 'mainBkg': '#1565C0', 'nodeBorder': '#0D47A1', 'clusterBkg': '#1A237E'}}}%%
+sequenceDiagram
+    participant C as 🖥 Client
+    participant S as ⚙️ Service
+    participant DB as 🗄 Idempotency Store
+
+    Note over C,DB: ✅ First request — token unseen
+    C->>S: POST /orders {clientToken: "tok-abc", ...}
+    S->>DB: Lookup "tok-abc"
+    DB-->>S: Not found
+    S->>S: Execute → create order
+    S->>DB: Store "tok-abc" → {orderId, response, expires: now+8h}
+    S-->>C: 201 Created {orderId: "ord-xyz"}
+
+    Note over C,DB: ✅ Network failure — safe retry
+    C->>S: POST /orders {clientToken: "tok-abc", ...}
+    S->>DB: Lookup "tok-abc"
+    DB-->>S: Found → replay response
+    S-->>C: 201 Created {orderId: "ord-xyz"} — no new order created
+
+    Note over C,DB: ⛔ Same token, different params — conflict
+    C->>S: POST /orders {clientToken: "tok-abc", quantity: 99}
+    S->>DB: Lookup "tok-abc"
+    DB-->>S: Found — params differ
+    S-->>C: 409 Conflict {conflictingOrderId: "ord-xyz"}
+
+    Note over C,DB: ♻️ Token retention window
+    S->>DB: Purge tokens older than min(8h, resource-lifetime + 1h)
