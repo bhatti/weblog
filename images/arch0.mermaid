@@ -1,0 +1,11 @@
+flowchart LR
+    A[Client] --> B[Service]
+    B --> C[Database]
+
+    classDef edge fill:#E8F4FF,stroke:#1C7ED6,color:#111,stroke-width:2px;
+    classDef core fill:#FFF4E6,stroke:#F76707,color:#111,stroke-width:2px;
+    classDef store fill:#F3F0FF,stroke:#7048E8,color:#111,stroke-width:2px;
+
+    class A edge;
+    class B core;
+    class C store;

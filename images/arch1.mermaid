@@ -1,0 +1,19 @@
+flowchart LR
+    U[Client] -->|timeouts and retries| G[Gateway]
+    G -->|validated command| A[API Service]
+    A -->|enqueue durable work| Q[Queue]
+    Q --> W[Worker]
+    W -->|idempotent write| D[(Primary DB)]
+    D -->|replication| R[(Replica)]
+    A -->|metrics logs traces| O[Observability]
+    W -->|health and readiness| O
+
+    classDef edge fill:#E8F4FF,stroke:#1C7ED6,color:#111,stroke-width:2px;
+    classDef core fill:#FFF4E6,stroke:#F76707,color:#111,stroke-width:2px;
+    classDef store fill:#F3F0FF,stroke:#7048E8,color:#111,stroke-width:2px;
+    classDef ops fill:#E6FCF5,stroke:#099268,color:#111,stroke-width:2px;
+
+    class U,G edge;
+    class A,Q,W core;
+    class D,R store;
+    class O ops;
