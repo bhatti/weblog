@@ -1,0 +1,15 @@
+graph TB
+    style MSG fill:#FF8C42,color:#000
+    style AGENT fill:#45B7D1,color:#000
+    style VIRT fill:#4ECDC4,color:#000
+    style DUR fill:#96CEB4,color:#000
+    style TIMER fill:#FFEAA7,color:#000
+    style METRICS fill:#DDA0DD,color:#000
+    style CACHE fill:#6C5CE7,color:#fff
+
+    MSG[Messages\nfrom other agents] --> AGENT[Your Agent\nLogic]
+    AGENT --> VIRT[virtual_actor\nActivate on demand]
+    AGENT --> DUR[durability\nSurvive restarts]
+    AGENT --> TIMER[timer\nHeartbeats + timeouts]
+    AGENT --> METRICS[metrics\nAuto Prometheus]
+    AGENT --> CACHE[caching\nMemoize LLM calls]

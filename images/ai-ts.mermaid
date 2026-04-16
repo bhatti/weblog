@@ -1,0 +1,9 @@
+graph LR
+    style S1 fill:#45B7D1,color:#000
+    style S2 fill:#4ECDC4,color:#000
+    style TS fill:#FFEAA7,color:#000
+    style S3 fill:#FF8C42,color:#000
+
+    S1[Supervisor-Spawned\nInstance\nwrites svc slot on Init] -->|write-once| TS[TupleSpace\nsvc:budget_manager:ID1\nbudget:team-a:1.00\nusage:team-a:0.042]
+    S2[Virtual Actor\nInstance\nfinds slot taken → skips] -->|read only| TS
+    S3[Routing Workflow\nDiscovers via TS\nalways gets ID1] -->|read| TS

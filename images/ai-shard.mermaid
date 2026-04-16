@@ -1,0 +1,16 @@
+graph TB
+    style SCHED fill:#45B7D1,color:#000
+    style W0 fill:#4ECDC4,color:#000
+    style W1 fill:#4ECDC4,color:#000
+    style W2 fill:#4ECDC4,color:#000
+    style W3 fill:#4ECDC4,color:#000
+    style AGG fill:#FFEAA7,color:#000
+
+    SCHED[Scatter-Gather\nCoordinator] -->|shard 0| W0[InferenceWorker 0\nModel warm in state]
+    SCHED -->|shard 1| W1[InferenceWorker 1\nModel warm in state]
+    SCHED -->|shard 2| W2[InferenceWorker 2\nModel warm in state]
+    SCHED -->|shard 3| W3[InferenceWorker 3\nModel warm in state]
+    W0 -->|result| AGG[Aggregate\nconcat / sum / merge]
+    W1 -->|result| AGG
+    W2 -->|result| AGG
+    W3 -->|result| AGG

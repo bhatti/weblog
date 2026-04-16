@@ -1,0 +1,13 @@
+graph TD
+    style IN fill:#45B7D1,color:#000
+    style R fill:#FFEAA7,color:#000
+    style S fill:#4ECDC4,color:#000
+    style E fill:#96CEB4,color:#000
+    style A fill:#FF8C42,color:#000
+    style G fill:#6C5CE7,color:#fff
+
+    IN[Input Content\nfrom user or agent] --> R{RouterActor\nClassify intent\ntrack in Prometheus}
+    R -->|summarize / short text| S[Summarize Pipeline\nChainActor]
+    R -->|extract / entities| E[Extract Pipeline\nChainActor]
+    R -->|analyze / compare| A[Analysis Pipeline\nChainActor]
+    R -->|default| G[Generate Pipeline\nChainActor]

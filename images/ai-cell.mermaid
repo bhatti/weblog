@@ -1,0 +1,9 @@
+graph TB
+    style C1 fill:#45B7D1,color:#000
+    style C2 fill:#4ECDC4,color:#000
+    style C3 fill:#96CEB4,color:#000
+    style SWIM fill:#FFEAA7,color:#000
+
+    C1[Cell: ACME Tenant\nRAG pipeline\nInference server\nAgent orchestrator] <-->|SWIM gossip\npeer discovery| C2[Cell: Beta Tenant\nRAG pipeline\nFine-tuning jobs]
+    C2 <-->|SWIM gossip| C3[Cell: Platform Team\nShared tools\nMCP gateway]
+    SWIM[Each cell: independent\nsupervisor + KV + registry\nfail independently]

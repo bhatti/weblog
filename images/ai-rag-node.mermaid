@@ -1,0 +1,9 @@
+graph LR
+    style N1 fill:#45B7D1,color:#000
+    style N2 fill:#45B7D1,color:#000
+    style T1 fill:#FF6B6B,color:#fff
+    style T2 fill:#4ECDC4,color:#000
+
+    N1[Node 1\nRAG + MCP Gateway] -->|JWT tenant_id=acme| T1[Tenant: ACME\nNamespace: prod\nIsolated KV + metrics]
+    N1 -->|JWT tenant_id=beta| T2[Tenant: Beta\nNamespace: dev\nIsolated KV + metrics]
+    N1 <-->|transparent gRPC\nSWIM gossip peer discovery| N2[Node 2\nAgent Orchestrator]

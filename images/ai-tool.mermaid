@@ -1,0 +1,13 @@
+graph TB
+    style LLM fill:#45B7D1,color:#000
+    style GW fill:#6C5CE7,color:#fff
+    style REG fill:#4ECDC4,color:#000
+    style C fill:#96CEB4,color:#000
+    style S fill:#FFEAA7,color:#000
+    style W fill:#FF8C42,color:#000
+
+    LLM[LLM Client\nJSON-RPC 2.0\ntools/list or tools/call] --> GW[MCPGatewayWorkflow\nTenant validation\nDurable session]
+    GW --> REG[ToolRegistryActor\nSchema validation\nUsage tracking]
+    REG --> C[CalculatorToolActor\nArithmetic]
+    REG --> S[SearchToolActor\nKV-backed document search]
+    REG --> W[WeatherToolActor\nSimulated weather data]

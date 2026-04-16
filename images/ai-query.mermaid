@@ -1,0 +1,14 @@
+graph TD
+    style Q fill:#45B7D1,color:#000
+    style RET fill:#4ECDC4,color:#000
+    style GEN fill:#96CEB4,color:#000
+    style VAL fill:#FFEAA7,color:#000
+    style DONE fill:#FF8C42,color:#000
+    style RETRY fill:#FF6B6B,color:#fff
+
+    Q[Query] --> RET[Retrieve\nRetrieverActor\nsingle or deep mode]
+    RET --> GEN[Generate\nGeneratorActor\ncircuit-breaker fallback]
+    GEN --> VAL{Validate\nValidatorActor\nlength + grounding + safety}
+    VAL -->|valid or max retries| DONE[Return Answer\nwith score + sources]
+    VAL -->|invalid, retry| RETRY[Escalate to\ndeep search mode]
+    RETRY --> RET

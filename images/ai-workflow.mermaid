@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> pending: workflow created
+    pending --> running: workflow_run
+    running --> running: workflow_signal:update
+    running --> completed: all steps done
+    running --> failed: retries exhausted
+    running --> cancelled: workflow_signal:cancel
+    completed --> [*]
+    failed --> [*]
+    cancelled --> [*]

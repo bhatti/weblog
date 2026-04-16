@@ -1,0 +1,14 @@
+graph TD
+    style INPUT fill:#45B7D1,color:#000
+    style CHAIN fill:#4ECDC4,color:#000
+    style JUDGE fill:#FFEAA7,color:#000
+    style PASS fill:#96CEB4,color:#000
+    style REFINE fill:#FF8C42,color:#000
+    style TS fill:#DDA0DD,color:#000
+
+    INPUT[Input Content] --> CHAIN[ChainActor\nexecute_chain]
+    CHAIN --> JUDGE{JudgeActor\nevaluate\nrelevance+completeness+clarity}
+    JUDGE -->|score >= threshold| PASS[Return Result]
+    JUDGE -->|score < threshold\n+ iter < max| REFINE[Refine\nprepend iteration note]
+    REFINE --> CHAIN
+    PASS --> TS[TupleSpace write\norchestrator result\npattern-matchable by any actor]

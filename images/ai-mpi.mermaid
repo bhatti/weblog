@@ -1,0 +1,12 @@
+graph TB
+    style BROAD fill:#45B7D1,color:#000
+    style RED fill:#4ECDC4,color:#000
+    style ALLRED fill:#96CEB4,color:#000
+    style BAR fill:#FFEAA7,color:#000
+    style SG fill:#FF8C42,color:#000
+
+    BROAD[BroadcastShardGroup\nConfig → All Workers\nMPI_Bcast equivalent]
+    RED[ReduceShardGroup\nAll Workers → Leader\n7 reduction types: sum/min/max/avg/merge/concat/vote]
+    ALLRED[AllReduceShardGroup\nEvery worker gets\naggregated result\nMPI_Allreduce]
+    BAR[BarrierShardGroup\nAll workers sync\nbefore next step\nMPI_Barrier]
+    SG[ScatterGather\nFan-out work\nFan-in results\nMPI_Scatter + MPI_Gather]

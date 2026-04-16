@@ -1,0 +1,11 @@
+graph TB
+    style NODE fill:#4ECDC4,color:#000
+    style A1 fill:#FF6B6B,color:#fff
+    style A2 fill:#6C5CE7,color:#fff
+    style A3 fill:#FF8C42,color:#000
+    style T fill:#96CEB4,color:#000
+
+    NODE[PlexSpaces Node\nShared WASM Runtime] --> A1[RAG Pipeline\nTeam: Search\nPython WASM]
+    NODE --> A2[Inference Server\nTeam: ML\nGo WASM]
+    NODE --> A3[Agent Orchestrator\nTeam: Platform\nTypeScript WASM]
+    NODE --> T[Shared: JWT Auth\nMulti-tenancy\nPrometheus /metrics]

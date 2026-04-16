@@ -1,0 +1,13 @@
+graph TD
+    style REQ fill:#45B7D1,color:#000
+    style BC fill:#FFEAA7,color:#000
+    style S fill:#96CEB4,color:#000
+    style M fill:#FF8C42,color:#000
+    style L fill:#FF6B6B,color:#fff
+    style ERR fill:#6C5CE7,color:#fff
+
+    REQ[Request + tenant_id\n+ prefer_gpu flag] --> BC{Budget Check\nBudgetManagerActor\nstate in TupleSpace}
+    BC -->|allowed, complexity<0.3| S[Small Model\ngpt-nano\n$0.001/1K tokens]
+    BC -->|allowed, complexity 0.3-0.7| M[Medium Model\ngpt-base\n$0.01/1K tokens]
+    BC -->|allowed + prefer_gpu, complexity>0.7| L[Large Model\ngpt-large\n$0.05/1K tokens]
+    BC -->|budget exhausted| ERR[Rejected\nbudget_exceeded]

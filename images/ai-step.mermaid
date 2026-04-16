@@ -1,0 +1,11 @@
+graph LR
+    style IN fill:#45B7D1,color:#000
+    style S1 fill:#4ECDC4,color:#000
+    style S2 fill:#96CEB4,color:#000
+    style S3 fill:#FFEAA7,color:#000
+    style OUT fill:#FF8C42,color:#000
+
+    IN[Input Content] --> S1[summarize\nTruncate to 200 chars]
+    S1 --> S2[extract_keywords\nTop-5 unique words]
+    S2 --> S3[format_output\nStructured JSON]
+    S3 --> OUT[Final Output\n+ step latencies]
