@@ -1,4 +1,11 @@
+%%{init: {'theme': 'base', 'themeVariables': {'background': '#1e1e2e', 'mainBkg': '#1e1e2e', 'nodeBorder': '#444', 'lineColor': '#aaa', 'textColor': '#eee', 'edgeLabelBackground': '#2a2a3e'}}}%%
 stateDiagram-v2
+    classDef pending   fill:#5DCAA5,stroke:#0F6E56,color:#085041,font-weight:500
+    classDef running   fill:#378ADD,stroke:#185FA5,color:#042C53,font-weight:500
+    classDef completed fill:#639922,stroke:#3B6D11,color:#173404,font-weight:500
+    classDef failed    fill:#E24B4A,stroke:#A32D2D,color:#501313,font-weight:500
+    classDef cancelled fill:#BA7517,stroke:#854F0B,color:#412402,font-weight:500
+
     [*] --> pending: workflow created
     pending --> running: workflow_run
     running --> running: workflow_signal:update
@@ -8,3 +15,9 @@ stateDiagram-v2
     completed --> [*]
     failed --> [*]
     cancelled --> [*]
+
+    class pending pending
+    class running running
+    class completed completed
+    class failed failed
+    class cancelled cancelled
