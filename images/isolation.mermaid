@@ -1,0 +1,18 @@
+graph TB
+    subgraph "Layer 3: Tenant Isolation"
+        subgraph "Layer 2b: Firecracker MicroVM"
+            subgraph "Layer 2a: WASM Sandbox"
+                subgraph "Layer 1: Actor Isolation"
+                    A[Actor State<br/>Private Memory]
+                end
+                W[Linear Memory<br/>WIT Capability Imports Only]
+            end
+            F[Firecracker KVM<br/>Hardware-Enforced I/O Boundary]
+        end
+        T[RequestContext<br/>tenant_id + namespace]
+    end
+
+    style A fill:#2E7D32,color:#fff,stroke:#1B5E20,stroke-width:2px
+    style W fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style F fill:#6A1B9A,color:#fff,stroke:#4A148C,stroke-width:2px
+    style T fill:#D32F2F,color:#fff,stroke:#B71C1C,stroke-width:2px

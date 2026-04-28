@@ -1,0 +1,23 @@
+%%{init: {'theme': 'base', 'themeVariables': {'background': '#1e1e2e', 'mainBkg': '#1e1e2e', 'actorBkg': '#2a2a3e', 'actorBorder': '#00d4ff', 'actorTextColor': '#eee', 'actorLineColor': '#00d4ff', 'signalColor': '#00d4ff', 'signalTextColor': '#eee', 'labelBoxBkgColor': '#2a2a3e', 'labelBoxBorderColor': '#00d4ff', 'labelTextColor': '#eee', 'loopTextColor': '#eee', 'noteBkgColor': '#37374a', 'noteBorderColor': '#00d4ff', 'noteTextColor': '#eee', 'activationBkgColor': '#378ADD', 'activationBorderColor': '#00d4ff', 'sequenceNumberColor': '#eee'}}}%%
+sequenceDiagram
+    participant User
+    participant Agent as AgentActor
+    participant LLM as LLMRouterActor
+    participant Tools as ToolRegistryActor
+    participant Audit as AuditEventActor
+    participant FSM as AgentStateFSM
+    User->>Agent: chat("What is 42 * 17?")
+    Agent->>FSM: transition("processing")
+    Agent->>LLM: chat_completion(messages, tools)
+    LLM-->>Agent: tool_use(calculator, "42 * 17")
+    Agent->>FSM: transition("tool_executing")
+    Agent->>Tools: execute_tool(calculator, "42 * 17")
+    Tools-->>Agent: result: 714
+    Agent->>Audit: log_event(tool_executed, calculator)
+    Agent->>FSM: transition("processing")
+    Agent->>LLM: chat_completion(messages + tool_result)
+    LLM-->>Agent: end_turn("714")
+    Agent->>FSM: transition("idle")
+    Agent-->>User: "42 multiplied by 17 equals 714"
+    Note over Audit: Fire-and-forget<br/>Append-only log
+    Note over FSM: Guards illegal<br/>state transitions

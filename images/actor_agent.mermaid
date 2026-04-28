@@ -1,0 +1,30 @@
+graph TB
+    subgraph "Agent = Actor"
+        direction TB
+        A1[GenServer<br/>Tool Executors]
+        A2[GenEvent<br/>Audit Loggers]
+        A3[GenStateMachine<br/>Quality Gates]
+        A4[Workflow<br/>Orchestrators]
+    end
+
+    subgraph "MiniClaw Actors"
+        direction TB
+        M1[AgentActor<br/>LLMRouterActor<br/>ToolRegistryActor<br/>MemoryActor<br/>SessionManagerActor<br/>TaskQueueActor<br/>HealthMonitorActor]
+        M2[AuditEventActor]
+        M3[AgentStateFSM]
+        M4[OrchestratorActor]
+    end
+
+    A1 --> M1
+    A2 --> M2
+    A3 --> M3
+    A4 --> M4
+
+    style A1 fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style A2 fill:#AD1457,color:#fff,stroke:#880E4F,stroke-width:2px
+    style A3 fill:#6A1B9A,color:#fff,stroke:#4A148C,stroke-width:2px
+    style A4 fill:#2E7D32,color:#fff,stroke:#1B5E20,stroke-width:2px
+    style M1 fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style M2 fill:#AD1457,color:#fff,stroke:#880E4F,stroke-width:2px
+    style M3 fill:#6A1B9A,color:#fff,stroke:#4A148C,stroke-width:2px
+    style M4 fill:#2E7D32,color:#fff,stroke:#1B5E20,stroke-width:2px

@@ -1,0 +1,24 @@
+graph LR
+    User([User]) --> Agent[AgentActor<br/>Core Loop]
+    Agent -->|ask| LLM[LLMRouterActor<br/>Circuit Breaker]
+    Agent -->|ask| Tools[ToolRegistryActor<br/>Sandboxed Execution]
+    Agent -->|send| Audit[AuditEventActor<br/>Immutable Log]
+    Agent -->|send| FSM[AgentStateFSM<br/>Lifecycle Guard]
+    Tools -->|ask| Memory[MemoryActor<br/>Scoped Memory]
+    User --> Session[SessionManagerActor<br/>Tenant-Scoped]
+    User --> Orch[OrchestratorActor<br/>Durable Workflow]
+    Orch -->|ask| Agent
+    User --> TaskQ[TaskQueueActor<br/>Channel Queue]
+    Health[HealthMonitorActor<br/>Poll Loop] -.->|send_after| Health
+
+    style User fill:#F57C00,color:#fff,stroke:#E65100,stroke-width:2px
+    style Agent fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style LLM fill:#6A1B9A,color:#fff,stroke:#4A148C,stroke-width:2px
+    style Tools fill:#2E7D32,color:#fff,stroke:#1B5E20,stroke-width:2px
+    style Memory fill:#00838F,color:#fff,stroke:#006064,stroke-width:2px
+    style Audit fill:#AD1457,color:#fff,stroke:#880E4F,stroke-width:2px
+    style FSM fill:#4E342E,color:#fff,stroke:#3E2723,stroke-width:2px
+    style Session fill:#283593,color:#fff,stroke:#1A237E,stroke-width:2px
+    style Orch fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style TaskQ fill:#558B2F,color:#fff,stroke:#33691E,stroke-width:2px
+    style Health fill:#E65100,color:#fff,stroke:#BF360C,stroke-width:2px

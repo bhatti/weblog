@@ -1,0 +1,14 @@
+%%{init: {'theme': 'base', 'themeVariables': {'background': '#1e1e2e', 'mainBkg': '#1e1e2e', 'actorBkg': '#2a2a3e', 'actorBorder': '#00d4ff', 'actorTextColor': '#eee', 'actorLineColor': '#00d4ff', 'signalColor': '#00d4ff', 'signalTextColor': '#eee', 'labelBoxBkgColor': '#2a2a3e', 'labelBoxBorderColor': '#00d4ff', 'labelTextColor': '#eee', 'loopTextColor': '#eee', 'noteBkgColor': '#37374a', 'noteBorderColor': '#00d4ff', 'noteTextColor': '#eee', 'activationBkgColor': '#378ADD', 'activationBorderColor': '#00d4ff', 'sequenceNumberColor': '#eee'}}}%%
+sequenceDiagram
+    participant Admin
+    participant Caller as AgentActor
+    participant Router as LLMRouterActor
+    participant KV
+    Admin->>Router: register_credential(phantom_token="tok_abc", api_key="sk-real")
+    Router->>KV: kv_put("cred:tok_abc", "sk-real")
+    Router-->>Admin: {status: "ok", phantom_token: "tok_abc"}
+    Note over Admin,KV: Real key never returned to caller
+    Caller->>Router: chat_completion(phantom_token="tok_abc", messages=[...])
+    Router->>KV: kv_get("cred:tok_abc") → "sk-real"
+    Note over Router: Resolved key used internally, discarded before response
+    Router-->>Caller: {response: {content: "...", stop_reason: "end_turn"}}

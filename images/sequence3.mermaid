@@ -1,0 +1,14 @@
+%%{init: {'theme': 'base', 'themeVariables': {'background': '#1e1e2e', 'mainBkg': '#1e1e2e', 'actorBkg': '#2a2a3e', 'actorBorder': '#00d4ff', 'actorTextColor': '#eee', 'actorLineColor': '#00d4ff', 'signalColor': '#00d4ff', 'signalTextColor': '#eee', 'labelBoxBkgColor': '#2a2a3e', 'labelBoxBorderColor': '#00d4ff', 'labelTextColor': '#eee', 'loopTextColor': '#eee', 'noteBkgColor': '#37374a', 'noteBorderColor': '#00d4ff', 'noteTextColor': '#eee', 'activationBkgColor': '#378ADD', 'activationBorderColor': '#00d4ff', 'sequenceNumberColor': '#eee'}}}%%
+sequenceDiagram
+    participant Timer as send_after (5s)
+    participant Monitor as HealthMonitorActor
+    participant PG as Process Groups
+    participant TS as TupleSpace
+    Timer->>Monitor: poll_tick
+    loop for each svc:* group
+        Monitor->>PG: members(group)
+        PG-->>Monitor: [actor_id_1, actor_id_2, ...]
+    end
+    Monitor->>TS: write(["health_snapshot", now, {svc:agent:2, ...}])
+    Monitor->>Timer: send_after(5000, "poll_tick")
+    Note over Monitor: Degraded groups = member_count == 0

@@ -1,0 +1,22 @@
+%%{init: {'theme': 'base', 'themeVariables': {'background': '#1e1e2e', 'mainBkg': '#1e1e2e', 'nodeBorder': '#555', 'lineColor': '#00d4ff', 'textColor': '#eee', 'edgeLabelBackground': '#2a2a3e', 'transitionColor': '#00d4ff'}}}%%
+stateDiagram-v2
+    [*] --> idle
+    idle --> processing: chat received
+    processing --> tool_executing: LLM requests tool
+    processing --> responding: LLM final answer
+    tool_executing --> processing: tool result appended
+    responding --> idle: response delivered
+    idle --> error: failure
+    processing --> error: failure
+    tool_executing --> error: failure
+    responding --> error: failure
+    error --> idle: recovery
+    classDef active  fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    classDef working fill:#2E7D32,color:#fff,stroke:#1B5E20,stroke-width:2px
+    classDef tooling fill:#6A1B9A,color:#fff,stroke:#4A148C,stroke-width:2px
+    classDef failing fill:#D32F2F,color:#fff,stroke:#B71C1C,stroke-width:2px
+    class idle active
+    class processing working
+    class tool_executing tooling
+    class responding working
+    class error failing

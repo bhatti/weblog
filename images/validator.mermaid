@@ -1,0 +1,15 @@
+flowchart LR
+    Gen[AgentActor<br/>GeneratorActor] --> V1{Length Check}
+    V1 -->|Pass| V2{Source Grounding}
+    V1 -->|Fail| Reject([Reject + Retry])
+    V2 -->|Pass| V3{Safety Check}
+    V2 -->|Fail| Reject
+    V3 -->|Pass| Accept([Accept])
+    V3 -->|Fail| Reject
+
+    style Gen fill:#6A1B9A,color:#fff,stroke:#4A148C,stroke-width:2px
+    style V1 fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style V2 fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style V3 fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style Accept fill:#2E7D32,color:#fff,stroke:#1B5E20,stroke-width:2px
+    style Reject fill:#D32F2F,color:#fff,stroke:#B71C1C,stroke-width:2px

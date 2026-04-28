@@ -1,0 +1,27 @@
+flowchart TD
+    Start([User Message]) --> Append[Append to History]
+    Append --> Discover[Discover Collaborators<br/>via Process Groups]
+    Discover --> Loop{i < 5?}
+    Loop -->|Yes| CallLLM[Call LLM<br/>ask llm_router]
+    CallLLM --> Check{stop_reason?}
+    Check -->|end_turn| Final[Extract Final Response]
+    Check -->|tool_use| ExecTools[Execute Tools<br/>ask tool_registry]
+    ExecTools --> AuditLog[Audit Event<br/>fire_audit]
+    AuditLog --> Loop
+    Loop -->|No: max reached| Final
+    Final --> Compact{History > Max?}
+    Compact -->|Yes| Truncate[Compact Context]
+    Compact -->|No| Persist
+    Truncate --> Persist[Persist Session<br/>kv_put]
+    Persist --> Return([Response])
+
+    style Start fill:#F57C00,color:#fff,stroke:#E65100,stroke-width:2px
+    style Return fill:#F57C00,color:#fff,stroke:#E65100,stroke-width:2px
+    style CallLLM fill:#6A1B9A,color:#fff,stroke:#4A148C,stroke-width:2px
+    style ExecTools fill:#2E7D32,color:#fff,stroke:#1B5E20,stroke-width:2px
+    style AuditLog fill:#AD1457,color:#fff,stroke:#880E4F,stroke-width:2px
+    style Persist fill:#00838F,color:#fff,stroke:#006064,stroke-width:2px
+    style Truncate fill:#00838F,color:#fff,stroke:#006064,stroke-width:2px
+    style Check fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style Loop fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
+    style Compact fill:#1565C0,color:#fff,stroke:#0D47A1,stroke-width:2px
