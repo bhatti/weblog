@@ -1,0 +1,91 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#1e3a5f",
+    "primaryTextColor": "#ffffff",
+    "primaryBorderColor": "#4a90d9",
+    "lineColor": "#888888",
+    "secondaryColor": "#2d6a4f",
+    "tertiaryColor": "#7b2d00",
+    "background": "transparent",
+    "mainBkg": "transparent",
+    "nodeBorder": "#555555",
+    "clusterBkg": "transparent"
+  }
+}}%%
+
+flowchart TB
+  subgraph OC["⚠️  OpenClaw — Monolithic Runtime"]
+    direction TB
+    OC1["🔴 Single Process\nAll agents share PID"]
+    OC2["🔴 Shared node_modules\nTransitive supply-chain risk"]
+    OC3["🔴 Monolithic Startup\nPlugin repair blocks all channels"]
+    OC4["🔴 Shared Credentials\nos.environ visible to all tools"]
+    OC5["🔴 No Tenant Boundary\nApp-level checks only"]
+    OC6["🔴 One Crash = Full Restart\nGateway cold path taxes everyone"]
+    OC1 --- OC2
+    OC2 --- OC3
+    OC3 --- OC4
+    OC4 --- OC5
+    OC5 --- OC6
+  end
+
+  subgraph MC["✅  MiniClaw — Actor-Based Runtime"]
+    direction TB
+
+    subgraph MSG["Layer 1 · Message Isolation"]
+      direction LR
+      M1["🟢 AgentActor\nPrivate state only"]
+      M2["🟢 LLMRouterActor\nPhantom token proxy"]
+      M3["🟢 ToolRegistryActor\nSchema-validated dispatch"]
+      M1 -. "host.ask()" .-> M2
+      M2 -. "host.ask()" .-> M3
+    end
+
+    subgraph TEN["Layer 2 · Tenant Isolation"]
+      T1["🔵 RequestContext JWT\nFramework-enforced scope"]
+      T2["🔵 KV · TupleSpace · PGs\nAll keyed by tenant+namespace"]
+      T1 --> T2
+    end
+
+    subgraph APP["Layer 3 · App Isolation"]
+      A1["🟣 llm-gateway app"]
+      A2["🟣 agent-app\n(per tenant team)"]
+      A3["🟣 tools-app"]
+      A4["🟣 audit-app"]
+    end
+
+    subgraph WASM["Layer 4 · WASM Sandbox"]
+      W1["🟠 WIT Import Surface\nNo fs · No env · No exec"]
+      W2["🟠 Linear Memory\nPer-actor, hardware-isolated"]
+      W1 --- W2
+    end
+
+    subgraph FC["Layer 5 · Firecracker / Docker"]
+      F1["🔥 microVM per tenant\n~125ms boot · KVM boundary"]
+      F2["🔥 Separate kernel\nBlocks JIT escape + syscall abuse"]
+      F1 --- F2
+    end
+
+    MSG --> TEN
+    TEN --> APP
+    APP --> WASM
+    WASM --> FC
+  end
+
+  OC1 -- "one process\none blast radius" --> OC6
+  OC6 -. "vs." .-> M1
+
+  classDef danger  fill:#9b1c1c,color:#fff,stroke:#ef4444,stroke-width:2px
+  classDef safe    fill:#14532d,color:#fff,stroke:#22c55e,stroke-width:2px
+  classDef tenant  fill:#1e3a5f,color:#fff,stroke:#60a5fa,stroke-width:2px
+  classDef app     fill:#3b1f6e,color:#fff,stroke:#a78bfa,stroke-width:2px
+  classDef wasm    fill:#78350f,color:#fff,stroke:#f59e0b,stroke-width:2px
+  classDef fire    fill:#7c2d12,color:#fff,stroke:#f97316,stroke-width:2px
+
+  class OC1,OC2,OC3,OC4,OC5,OC6 danger
+  class M1,M2,M3 safe
+  class T1,T2 tenant
+  class A1,A2,A3,A4 app
+  class W1,W2 wasm
+  class F1,F2 fire
