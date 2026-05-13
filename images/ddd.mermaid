@@ -1,0 +1,14 @@
+graph TD
+    classDef domain fill:#2563EB,stroke:#1E40AF,color:#FFFFFF
+    classDef infra fill:#059669,stroke:#047857,color:#FFFFFF
+    classDef app fill:#D97706,stroke:#B45309,color:#FFFFFF
+    classDef iface fill:#7C3AED,stroke:#6D28D9,color:#FFFFFF
+
+    A[REST API / CLI]:::iface --> B[Application Layer]:::app
+    B --> C[Domain Layer]:::domain
+    D[Infrastructure Layer]:::infra --> C
+    B --> D
+
+    subgraph Ports
+        C
+    end

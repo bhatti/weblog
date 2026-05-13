@@ -1,0 +1,14 @@
+graph LR
+    classDef source fill:#059669,stroke:#047857,color:#FFFFFF
+    classDef filter fill:#2563EB,stroke:#1E40AF,color:#FFFFFF
+    classDef sink fill:#DC2626,stroke:#B91C1C,color:#FFFFFF
+    classDef event fill:#D97706,stroke:#B45309,color:#FFFFFF
+
+    S[HTTP Source]:::source --> E1[Raw Event]:::event
+    E1 --> F1[Parse]:::filter
+    F1 --> F2[Enrich]:::filter
+    F2 --> F3[Filter]:::filter
+    F3 --> F4[Mask PII]:::filter
+    F4 --> F5[Route]:::filter
+    F5 --> K[Sink A]:::sink
+    F5 --> L[Sink B]:::sink
