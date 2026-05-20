@@ -1,0 +1,27 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'lineColor': '#6b7280', 'textColor': '#1f2937'}}}%%
+graph LR
+    subgraph "Opus-class (Reasoning)"
+        A[Refine PRD/TRD]
+        B[Architecture]
+        C[Code Review]
+        D[Security Review]
+    end
+
+    subgraph "Sonnet-class (Execution)"
+        E[Implement]
+        F[Groom]
+        G[Ship]
+    end
+
+    A -->|"Precise specs"| E
+    B -->|"Clear constraints"| E
+    C -->|"Fix findings"| E
+    D -->|"Fix findings"| E
+
+    style A fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style B fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style C fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style D fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style E fill:#059669,stroke:#047857,color:#ffffff
+    style F fill:#059669,stroke:#047857,color:#ffffff
+    style G fill:#059669,stroke:#047857,color:#ffffff

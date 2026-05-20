@@ -1,0 +1,23 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1d4ed8', 'lineColor': '#6b7280', 'textColor': '#1f2937'}}}%%
+graph LR
+    subgraph "Functional Core (Pure, Testable)"
+        A[Domain Logic] --> B[State Machines]
+        B --> C[Error Values]
+        C --> D[Immutable Transforms]
+    end
+
+    subgraph "Imperative Shell (I/O, Fault-Tolerant)"
+        E[HTTP/gRPC<br/>+ Circuit Breaker] --> A
+        A --> F[Database<br/>+ Outbox Pattern]
+        A --> G[Message Queue<br/>+ Retry w/ Jitter]
+        A --> H[External APIs<br/>+ Bulkhead]
+    end
+
+    style A fill:#059669,stroke:#047857,color:#ffffff
+    style B fill:#059669,stroke:#047857,color:#ffffff
+    style C fill:#059669,stroke:#047857,color:#ffffff
+    style D fill:#059669,stroke:#047857,color:#ffffff
+    style E fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style F fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style G fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style H fill:#2563eb,stroke:#1d4ed8,color:#ffffff

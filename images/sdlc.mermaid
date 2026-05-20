@@ -1,0 +1,37 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1d4ed8', 'secondaryColor': '#7c3aed', 'secondaryTextColor': '#ffffff', 'secondaryBorderColor': '#6d28d9', 'tertiaryColor': '#059669', 'tertiaryTextColor': '#ffffff', 'tertiaryBorderColor': '#047857', 'lineColor': '#6b7280', 'textColor': '#1f2937', 'background': '#f8fafc'}}}%%
+flowchart TD
+    A[Idea / Problem] --> B["/ygs-refine-prd"]
+    B --> C["/ygs-review-prd"]
+    C --> D["/ygs-refine-trd"]
+    D --> E["/ygs-refine-architecture"]
+    E --> F["/ygs-review-architecture"]
+    F --> G["/ygs-estimate"]
+    G --> H["/ygs-spike ❓"]
+    H --> I["/ygs-wbs"]
+    I --> J["/ygs-implement"]
+    J --> K["/ygs-code-review"]
+    K --> L["/ygs-security-review"]
+    L --> M["/ygs-sre-review"]
+    M --> N["/ygs-qa"]
+    N --> O["/ygs-uat"]
+    O --> P["/ygs-ship"]
+    P --> Q["/ygs-retro"]
+    Q -.->|Feedback Loop| A
+
+    style A fill:#dc2626,stroke:#b91c1c,color:#ffffff
+    style B fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style C fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style D fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style E fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style F fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style G fill:#ca8a04,stroke:#a16207,color:#ffffff
+    style H fill:#f59e0b,stroke:#d97706,color:#1f2937
+    style I fill:#ca8a04,stroke:#a16207,color:#ffffff
+    style J fill:#059669,stroke:#047857,color:#ffffff
+    style K fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style L fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style M fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style N fill:#d97706,stroke:#b45309,color:#ffffff
+    style O fill:#d97706,stroke:#b45309,color:#ffffff
+    style P fill:#16a34a,stroke:#15803d,color:#ffffff
+    style Q fill:#6b7280,stroke:#4b5563,color:#ffffff

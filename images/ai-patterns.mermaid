@@ -1,0 +1,23 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'lineColor': '#6b7280', 'textColor': '#1f2937'}}}%%
+graph TD
+    subgraph "Agent Memory Architecture"
+        A[Short-Term<br/>Current Session Context] --> D[AI Coding Agent]
+        B[Medium-Term<br/>SDLC Skills + Rules] --> D
+        C[Long-Term<br/>Org Knowledge + ADRs] --> D
+    end
+
+    subgraph "Agentic Patterns in Skills"
+        D --> E[Reflection<br/>Review Phases]
+        D --> F[Prompt Chaining<br/>Sequential Tasks]
+        D --> G[Tool Calling<br/>Structured Workflows]
+        D --> H[Human-in-Loop<br/>Scope Guardrails]
+    end
+
+    style A fill:#d97706,stroke:#b45309,color:#ffffff
+    style B fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style C fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style D fill:#059669,stroke:#047857,color:#ffffff
+    style E fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style F fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style G fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style H fill:#0891b2,stroke:#0e7490,color:#ffffff

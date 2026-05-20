@@ -1,0 +1,24 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'lineColor': '#6b7280', 'textColor': '#1f2937'}}}%%
+flowchart LR
+    A[Pick Task] --> B[Assess Scope]
+    B --> C[Implement]
+    C --> D{3+ unplanned files?}
+    D -->|Yes| E[STOP & Report]
+    D -->|No| F{5 files changed?}
+    F -->|Yes| G[Checkpoint: Build + Test]
+    G --> C
+    F -->|No| C
+    C --> H[Write Tests]
+    H --> I[Final Verification]
+    I --> J[Move to Done]
+
+    style A fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style B fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style C fill:#059669,stroke:#047857,color:#ffffff
+    style D fill:#d97706,stroke:#b45309,color:#ffffff
+    style E fill:#dc2626,stroke:#b91c1c,color:#ffffff
+    style F fill:#d97706,stroke:#b45309,color:#ffffff
+    style G fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style H fill:#059669,stroke:#047857,color:#ffffff
+    style I fill:#059669,stroke:#047857,color:#ffffff
+    style J fill:#16a34a,stroke:#15803d,color:#ffffff

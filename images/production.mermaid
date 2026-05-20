@@ -1,0 +1,43 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#2563eb', 'primaryTextColor': '#ffffff', 'lineColor': '#6b7280', 'textColor': '#1f2937'}}}%%
+flowchart TD
+    subgraph Define ["Define — You Own"]
+        A[Product Vision<br/>Customer Feedback] --> B[Refined PRD<br/>RFC 2119 Keywords]
+        B --> C[Technical Design<br/>Trade-off Analysis]
+        C --> D[Architecture Decisions<br/>ADRs]
+    end
+
+    subgraph Build ["Build — AI Accelerates"]
+        D --> E[Vertical Slice Tasks<br/>Dependency-Ordered]
+        E --> F[Implementation<br/>Scope Guardrails]
+        F --> G[Tests<br/>Real Impls, Stubs at Boundaries]
+    end
+
+    subgraph Validate ["Validate — Shared Responsibility"]
+        G --> H[Code Review<br/>Two-Pass, MUST/SHOULD/MAY]
+        H --> I[Security Review<br/>Red-Team + CIA Triad]
+        I --> J[SRE Review<br/>Failure Modes + Observability]
+        J --> K[QA + UAT<br/>Health Score + User Workflows]
+    end
+
+    subgraph Ship ["Ship — Automated + You Approve"]
+        K --> L[CI/CD Pipeline<br/>All Tests Green]
+        L --> M[Canary Deploy<br/>Auto-Rollback on Breach]
+        M --> N[Monitor + Learn<br/>Retro + Five Whys]
+    end
+
+    N -.->|"Feedback Loop<br/>(Skills improve each cycle)"| A
+
+    style A fill:#dc2626,stroke:#b91c1c,color:#ffffff
+    style B fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style C fill:#2563eb,stroke:#1d4ed8,color:#ffffff
+    style D fill:#7c3aed,stroke:#6d28d9,color:#ffffff
+    style E fill:#ca8a04,stroke:#a16207,color:#ffffff
+    style F fill:#059669,stroke:#047857,color:#ffffff
+    style G fill:#059669,stroke:#047857,color:#ffffff
+    style H fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style I fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style J fill:#0891b2,stroke:#0e7490,color:#ffffff
+    style K fill:#d97706,stroke:#b45309,color:#ffffff
+    style L fill:#16a34a,stroke:#15803d,color:#ffffff
+    style M fill:#16a34a,stroke:#15803d,color:#ffffff
+    style N fill:#16a34a,stroke:#15803d,color:#ffffff
