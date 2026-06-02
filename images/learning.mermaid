@@ -1,0 +1,29 @@
+flowchart TD
+  pr["create-pr\nopen PR on GitHub"]:::purple
+
+  subgraph loop["monitor-pr  ·  timeout 24h"]
+    poll["poll PR comments\nevery 2 min"]:::teal
+    new{"new review\ncomment?"}:::amber
+    feed["feed comment\nto Claude"]:::teal
+    commit["apply change\ncommit + push"]:::teal
+    reply["reply on PR\nconfirming fix"]:::teal
+    track["track comment ID\n.processed_comments"]:::gray
+    merged{"PR merged\nor closed?"}:::amber
+  end
+
+  learn["learn\nwrite to learn_context/"]:::purple
+  cleanup([cleanup]):::gray
+
+  pr --> poll
+  poll --> new
+  new -->|yes| feed
+  new -->|no| merged
+  feed --> commit --> reply --> track --> merged
+  merged -->|no — wait 2 min| poll
+  merged -->|yes| learn
+  learn --> cleanup
+
+  classDef teal   fill:#1D9E75,stroke:#085041,color:#ffffff
+  classDef purple fill:#534AB7,stroke:#26215C,color:#ffffff
+  classDef gray   fill:#888780,stroke:#2C2C2A,color:#ffffff
+  classDef amber  fill:#BA7517,stroke:#412402,color:#ffffff
