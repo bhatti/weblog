@@ -1,0 +1,112 @@
+flowchart TB
+    Op(["👤 Operator / Dev"])
+    Cust(["👤 Customer"])
+
+    subgraph CP["🧠 Control Plane"]
+        direction TB
+
+        subgraph PROV["Provisioning"]
+            direction LR
+            PAPI["REST / gRPC API\nFastAPI · Go service"]
+            JQUEUE[("Job Queue\nPostgreSQL + pg_boss\nor NATS JetStream")]
+            PWRK["Provisioning Worker"]
+        end
+
+        subgraph CFGM["Config Management"]
+            direction LR
+            XDS["xDS Control Plane\nGo control plane"]
+            ETCD[("etcd\nConfig Store")]
+            OBJST[("Object Storage\nS3-compat · MinIO")]
+        end
+
+        subgraph IDENT["Identity & Certs"]
+            direction LR
+            SPIRE["SPIFFE / SPIRE\nWorkload Identity"]
+            CERTM["cert-manager\nTLS · internal PKI"]
+        end
+    end
+
+    subgraph INFRA["🏗️ Infrastructure Layer"]
+        direction LR
+        TF["Terraform / OpenTofu\nCloud · On-prem · Multi-cloud"]
+        BOOT["Ansible · cloud-init\nNode Bootstrap"]
+        OCI[("OCI Container Images\nkaniko · buildkit")]
+    end
+
+    subgraph DP["🔀 Data Plane"]
+        direction TB
+        WAF["WAF / CDN\nCloudflare · Fastly · generic"]
+        LB["L4 / L7 Load Balancer\nMetalLB · cloud LB · GSLB"]
+
+        subgraph IGW["Ingress Gateway"]
+            direction LR
+            ENVY(["Envoy Gateway\nmTLS · Access Logs · L7"])
+            subgraph EXTPROC["Ext Processing"]
+                direction TB
+                OPA["OPA / ext_authz\nAuthn + Authz"]
+                RLIM["Rate Limiter\nEnvoy RLS · Redis"]
+            end
+        end
+
+        subgraph K8S["Kubernetes Cluster"]
+            subgraph SVCS["Services — Envoy sidecar mesh"]
+                direction LR
+                SVC1["Service A"]
+                SVC2["Service B"]
+                SVCN["Service N"]
+            end
+        end
+    end
+
+    subgraph OBS["📊 Observability"]
+        direction LR
+        OTEL["OpenTelemetry\nCollector"]
+        PROM["Prometheus · Thanos\nMetrics"]
+        TEMPO["Tempo · Jaeger\nTraces"]
+        LOKI["Loki · ELK\nLogs"]
+    end
+
+    Op -->|"API request"| PAPI
+    PAPI --> JQUEUE --> PWRK
+    PWRK -->|"apply IaC"| TF
+    PWRK -->|"push config"| ETCD
+    TF -->|"provision cluster"| K8S
+    ETCD <-->|"watch / notify"| XDS
+    XDS --> OBJST
+    BOOT --> OCI
+    OCI -->|"deploy images"| K8S
+    CERTM <-->|"issue SVIDs"| SPIRE
+
+    Cust --> WAF --> LB --> ENVY
+    ENVY <--> EXTPROC
+    ENVY -->|"L7 routing"| SVCS
+    XDS -->|"Clusters · Routes\nListeners · Endpoints"| ENVY
+    XDS -->|"sidecar xDS"| SVCS
+    SPIRE -->|"SVID certs"| ENVY
+    SPIRE -->|"SVID certs"| SVCS
+
+    ENVY -->|"metrics · traces · logs"| OTEL
+    SVCS -->|"telemetry"| OTEL
+    OTEL --> PROM
+    OTEL --> TEMPO
+    OTEL --> LOKI
+
+    classDef api fill:#2563EB,stroke:#1E40AF,color:#fff
+    classDef queue fill:#D97706,stroke:#92400E,color:#fff
+    classDef db fill:#059669,stroke:#065F46,color:#fff
+    classDef infra fill:#7C3AED,stroke:#4C1D95,color:#fff
+    classDef proxy fill:#DC2626,stroke:#991B1B,color:#fff
+    classDef sidecar fill:#BE185D,stroke:#831843,color:#fff
+    classDef actor fill:#1e293b,stroke:#475569,color:#e2e8f0
+    classDef obs fill:#0E7490,stroke:#164E63,color:#fff
+    classDef identity fill:#6D28D9,stroke:#4C1D95,color:#fff
+
+    class Op,Cust actor
+    class PAPI,PWRK,XDS api
+    class JQUEUE,ETCD,OBJST,OCI db
+    class TF,BOOT,WAF,LB infra
+    class ENVY proxy
+    class OPA,RLIM sidecar
+    class OTEL,PROM,TEMPO,LOKI obs
+    class SPIRE,CERTM identity
+    class SVC1,SVC2,SVCN api

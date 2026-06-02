@@ -1,0 +1,112 @@
+flowchart TB
+    Dev(["👤 Dev"])
+
+    subgraph OSB["🔧 Open Service Broker"]
+        direction TB
+        FA["FastAPI"]
+        SQS(["SQS Queue"])
+        WK["Worker"]
+        DDB[("DynamoDB")]
+        subgraph PT["Provisioning Tasks"]
+            direction LR
+            R53["Route53"]
+            CFP["CloudFront"]
+            APIC["API Calls"]
+        end
+    end
+
+    Dev -->|"provision request"| FA
+    FA --> SQS --> WK
+    WK --> PT
+    FA <--> DDB
+    WK --> DDB
+
+    S3[("S3 Bucket")]
+
+    subgraph SOV["⚙️ Sovereign — Config Management"]
+        direction TB
+        SAPI["FastAPI"]
+        subgraph CFG["Configuration"]
+            direction TB
+            CTX["Context"]
+            TMPL["Templates"]
+            CLUS["Clusters"]
+            RTS["Routes"]
+            LST["Listeners"]
+        end
+    end
+
+    SAPI --> CTX
+    CTX --> S3
+    CTX --> TMPL
+    TMPL --> CLUS
+    TMPL --> RTS
+    TMPL --> LST
+
+    subgraph FLEET["☁️ EC2 Fleet — 2000 proxies · 13 regions"]
+        direction LR
+        E1(["Envoy"])
+        E2(["Envoy"])
+        E3(["Envoy …"])
+    end
+
+    CLUS -->|"xDS push"| FLEET
+    RTS -->|"xDS push"| FLEET
+    LST -->|"xDS push"| FLEET
+
+    subgraph BUILD["🏗️ Infrastructure Build"]
+        direction LR
+        subgraph CFN["AWS CloudFormation"]
+            CFNR["VPC · Subnet · IGW · SG\nASG · NLB · IAM\nRoute53 · KeyPair · ACM"]
+        end
+        subgraph PKR["HashiCorp Packer"]
+            SALT["SaltStack Config\nEnvoy · Agent · Security\nNetwork · Containers"]
+            EC2P["EC2 Provisioner"]
+        end
+        AMI[("AMI")]
+    end
+
+    SALT --> EC2P --> AMI
+    AMI --> FLEET
+    CFN --> FLEET
+
+    Cust(["👤 Customer"])
+    CFDOS["CloudFront\n+ DDoS Protection"]
+    NLB["NLB"]
+
+    subgraph EGW["🌐 Envoy Gateway"]
+        direction LR
+        PROXY(["Envoy\nAccess Logs"])
+        subgraph SCS["Sidecars"]
+            direction TB
+            AUTHN["Authentication"]
+            AUTHZ["Authorisation"]
+            RL["Rate Limiting"]
+        end
+    end
+
+    BE["Backend Services"]
+
+    Cust --> CFDOS
+    CFDOS <--> NLB
+    NLB <--> PROXY
+    PROXY <--> SCS
+    PROXY --> BE
+
+    classDef api fill:#2563EB,stroke:#1E40AF,color:#fff
+    classDef queue fill:#D97706,stroke:#92400E,color:#fff
+    classDef db fill:#059669,stroke:#065F46,color:#fff
+    classDef infra fill:#7C3AED,stroke:#4C1D95,color:#fff
+    classDef proxy fill:#DC2626,stroke:#991B1B,color:#fff
+    classDef sidecar fill:#BE185D,stroke:#831843,color:#fff
+    classDef actor fill:#1e293b,stroke:#475569,color:#e2e8f0
+    classDef task fill:#0E7490,stroke:#164E63,color:#fff
+
+    class Dev,Cust actor
+    class FA,WK,SAPI,BE api
+    class SQS queue
+    class DDB,S3,AMI db
+    class CFNR,SALT,EC2P,CFDOS,NLB infra
+    class E1,E2,E3,PROXY proxy
+    class R53,CFP,APIC,CLUS,RTS,LST,CTX,TMPL task
+    class AUTHN,AUTHZ,RL sidecar

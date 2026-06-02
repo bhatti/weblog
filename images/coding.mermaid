@@ -1,0 +1,28 @@
+flowchart TD
+  setup([setup]):::gray
+  plan[plan]:::teal
+  impl[implement]:::teal
+  unit[unit-test]:::teal
+  verify[self-verify]:::teal
+  pr[create-pr]:::purple
+  monitor[monitor-pr]:::purple
+  learn[learn]:::purple
+  cleanup([cleanup]):::gray
+  fix[fix-tests]:::amber
+  blocked[notify-blocked]:::coral
+
+  setup --> plan --> impl --> unit --> verify --> pr
+  pr --> monitor & learn
+  monitor & learn --> cleanup
+  impl -->|exit 2| blocked
+  impl -->|exit 3| fix
+  unit -->|fail| fix
+  verify -->|fail| fix
+  fix -->|retry| unit
+  blocked --> cleanup
+
+  classDef teal   fill:#1D9E75,stroke:#085041,color:#ffffff
+  classDef purple fill:#534AB7,stroke:#26215C,color:#ffffff
+  classDef gray   fill:#888780,stroke:#2C2C2A,color:#ffffff
+  classDef amber  fill:#BA7517,stroke:#412402,color:#ffffff
+  classDef coral  fill:#993C1D,stroke:#4A1B0C,color:#ffffff

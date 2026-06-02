@@ -1,0 +1,14 @@
+flowchart LR
+  setup["setup\n─────\nmeta.env"]:::gray
+  plan["plan\n─────\nPLAN.md\nplan_result.json"]:::teal
+  impl["implement\n─────\nimpl_result.json\nimpl_diff.patch"]:::teal
+  verify["self-verify\n─────\nverify_result.json\ntest_output.txt"]:::teal
+
+  setup -->|meta.env| plan
+  plan -->|PLAN.md| impl
+  impl -->|result + diff| verify
+  setup -.->|meta.env| impl
+  setup -.->|meta.env| verify
+
+  classDef teal fill:#1D9E75,stroke:#085041,color:#ffffff
+  classDef gray fill:#888780,stroke:#2C2C2A,color:#ffffff

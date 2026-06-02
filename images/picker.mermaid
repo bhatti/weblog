@@ -1,0 +1,19 @@
+flowchart LR
+  cron(["cron\nevery minute"]):::gray
+  gate{"skip_if\nqueue >= 10?"}:::amber
+  skip(["skip — zero cost"]):::coral
+  gather["gather-issues\nfetch + relabel"]:::teal
+  submit["submit-jobs\nDB write + dedup"]:::teal
+  queue[("implement jobs")]:::purple
+
+  cron --> gate
+  gate -->|yes| skip
+  gate -->|no| gather
+  gather --> submit
+  submit -->|unique key| queue
+
+  classDef teal   fill:#1D9E75,stroke:#085041,color:#ffffff
+  classDef purple fill:#534AB7,stroke:#26215C,color:#ffffff
+  classDef gray   fill:#888780,stroke:#2C2C2A,color:#ffffff
+  classDef amber  fill:#BA7517,stroke:#412402,color:#ffffff
+  classDef coral  fill:#993C1D,stroke:#4A1B0C,color:#ffffff
