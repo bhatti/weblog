@@ -1,0 +1,18 @@
+flowchart TD
+    START["🚀 Startup"] --> RF["Read role from config"]
+    RF --> LIC["Resolve license entitlements"]
+    LIC --> FACTORY["NodePolicyFactory.create()\n⬅ ONLY mode switch in the codebase"]
+    FACTORY -->|"role: leader"| LP["LeaderPolicy\n{ enableSearch: true }"]
+    FACTORY -->|"role: worker"| WP["WorkerPolicy\n{ maxWorkers: 8 }"]
+    FACTORY -->|"role: edge"| EP["EdgePolicy\n{ maxHeapMB: 512 }"]
+    LP --> APP["Application code\nreceives policy — no mode checks"]
+    WP --> APP
+    EP --> APP
+    APP --> RUN["✅ Zero if-else scattered\nacross domain logic"]
+
+    style START fill:#e67e22,color:#fff,stroke:#d35400
+    style FACTORY fill:#8e44ad,color:#fff,stroke:#6c3483
+    style LP fill:#27ae60,color:#fff,stroke:#1e8449
+    style WP fill:#27ae60,color:#fff,stroke:#1e8449
+    style EP fill:#27ae60,color:#fff,stroke:#1e8449
+    style RUN fill:#2980b9,color:#fff,stroke:#1a5276

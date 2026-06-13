@@ -1,0 +1,28 @@
+graph TB
+    KERNEL["Microkernel\nmodule loader · extension points · lifecycle"]
+
+    LM["LeaderModule\nrole:leader"]
+    WM["WorkerModule\nrole:worker"]
+    KM["KafkaModule\nconnector:kafka"]
+    SM["S3Module\nconnector:s3"]
+
+    ED["Edge node\ncore + syslog + s3 · 39 MB"]
+    LD["Leader node\ncore + leader + mgmt · 45 MB"]
+    WD["Worker node\ncore + worker + connectors"]
+
+    KERNEL -->|"activation events"| LM & WM & KM & SM
+
+    LM --> ED
+    LM --> LD
+    WM --> WD
+    KM --> WD
+    SM --> ED
+
+    style KERNEL fill:#EEEDFE,stroke:#534AB7,color:#3C3489
+    style LM fill:#E1F5EE,stroke:#0F6E56,color:#085041
+    style WM fill:#E1F5EE,stroke:#0F6E56,color:#085041
+    style KM fill:#E1F5EE,stroke:#0F6E56,color:#085041
+    style SM fill:#E1F5EE,stroke:#0F6E56,color:#085041
+    style ED fill:#F1EFE8,stroke:#5F5E5A,color:#444441
+    style LD fill:#F1EFE8,stroke:#5F5E5A,color:#444441
+    style WD fill:#F1EFE8,stroke:#5F5E5A,color:#444441

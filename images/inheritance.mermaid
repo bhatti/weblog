@@ -1,0 +1,24 @@
+graph LR
+    subgraph "Inheritance (Dangerous)"
+        direction TB
+        WL_BAD["WorkerListener"] -->|"extends"| TD["TcpDataInput\n(2,000+ lines)"]
+        TD -->|"extends"| BI["BaseInput\n(1000+ lines)"]
+        BI -->|"extends"| SV["Serviceable\n(EventEmitter)"]
+    end
+
+    subgraph "Composition (Safe)"
+        direction TB
+        WL_GOOD["WorkerListener"]
+        WL_GOOD -->|"uses"| TS["ITlsServer\n(transport only)"]
+        WL_GOOD -->|"uses"| AU["IWorkerAuth\n(token validation)"]
+        WL_GOOD -->|"uses"| RG["IWorkerRegistry\n(connection tracking)"]
+    end
+
+    style WL_BAD fill:#c0392b,color:#fff,stroke:#922b21
+    style TD fill:#c0392b,color:#fff,stroke:#922b21
+    style BI fill:#c0392b,color:#fff,stroke:#922b21
+    style SV fill:#c0392b,color:#fff,stroke:#922b21
+    style WL_GOOD fill:#27ae60,color:#fff,stroke:#1e8449
+    style TS fill:#27ae60,color:#fff,stroke:#1e8449
+    style AU fill:#27ae60,color:#fff,stroke:#1e8449
+    style RG fill:#27ae60,color:#fff,stroke:#1e8449
