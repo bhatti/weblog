@@ -1,0 +1,24 @@
+graph TD
+    Supervisor["🎯 PlexSpaces Supervisor\none_for_one strategy\nmax 10 restarts / 60s"]
+
+    Supervisor --> A["AgentActor ✓"]
+    Supervisor --> B["LLMGatewayActor ✓"]
+    Supervisor --> C["ToolExecutorActor 💥 CRASH"]
+    Supervisor --> D["SkillStoreActor ✓"]
+    Supervisor --> E["GuardrailsGateActor ✓"]
+    Supervisor --> F["AuditEventActor ✓"]
+    Supervisor --> G["CronSchedulerActor ✓"]
+    Supervisor --> H["... 5 more actors ✓"]
+
+    C -->|"supervisor restarts\nonly this child"| C2["ToolExecutorActor ✓ RESTARTED"]
+
+    style Supervisor fill:#01579B,color:#FFFFFF,stroke:#0277BD,stroke-width:2px
+    style A fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style B fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style C fill:#B71C1C,color:#FFFFFF,stroke:#D32F2F,stroke-width:2px
+    style C2 fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style D fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style E fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style F fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style G fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style H fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px

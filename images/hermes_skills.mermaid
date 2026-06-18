@@ -1,0 +1,35 @@
+graph TD
+    A["AgentActor\ncompletes task\n3+ tools used"] -->|"send: evaluate_for_learning\n(never blocks response)"| B["SkillStoreActor\nworth extracting?"]
+    B -->|"Yes → launch durable workflow"| C["SkillExtractionWorkflow\ncheckpointed steps"]
+
+    C -->|"ask: name + description"| LLM1["LLMGatewayActor"]
+    C -->|"ask: procedure steps"| LLM2["LLMGatewayActor"]
+    C -->|"ask: trigger keywords"| LLM3["LLMGatewayActor"]
+
+    LLM1 --> D["Merge results"]
+    LLM2 --> D
+    LLM3 --> D
+
+    D -->|"propose_skill"| E["SkillStoreActor\npersist"]
+    E -->|"metadata"| KV["KV\nskill_meta:id\nstatus, usage_count"]
+    E -->|"procedure text"| Blob["BlobStorage\nskill_procedure_id"]
+    E -->|"indexes"| TS["TupleSpace\nskill_tag, skill_trigger"]
+
+    F["Next user message"] -->|"ask: match_skills"| G["SkillStoreActor\nTupleSpace pattern scan"]
+    G -->|"skill found"| H["Inject into system prompt\nagent executes faster"]
+
+    style A fill:#1565C0,color:#FFFFFF,stroke:#0D47A1,stroke-width:2px
+    style B fill:#006064,color:#FFFFFF,stroke:#004D40,stroke-width:2px
+    style C fill:#880E4F,color:#FFFFFF,stroke:#AD1457,stroke-width:2px
+    style LLM1 fill:#6A1B9A,color:#FFFFFF,stroke:#4A148C,stroke-width:2px
+    style LLM2 fill:#6A1B9A,color:#FFFFFF,stroke:#4A148C,stroke-width:2px
+    style LLM3 fill:#6A1B9A,color:#FFFFFF,stroke:#4A148C,stroke-width:2px
+    style D fill:#33691E,color:#FFFFFF,stroke:#558B2F,stroke-width:2px
+    style E fill:#006064,color:#FFFFFF,stroke:#004D40,stroke-width:2px
+    style KV fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px
+    style Blob fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px
+    style TS fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px
+    style F fill:#E65100,color:#FFFFFF,stroke:#BF360C,stroke-width:2px
+    style G fill:#006064,color:#FFFFFF,stroke:#004D40,stroke-width:2px
+    style H fill:#1A237E,color:#FFFFFF,stroke:#283593,stroke-width:2px
+

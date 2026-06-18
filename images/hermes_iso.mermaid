@@ -1,0 +1,20 @@
+graph TB
+    subgraph VM["🔒 Layer 3: Firecracker MicroVM (production)"]
+        subgraph WASM["🔐 Layer 2: WASM Linear Memory Sandbox"]
+            subgraph Actor["🛡️ Layer 1: Actor Message Isolation"]
+                AgentActor["AgentActor\nprivate state only"]
+                SkillActor["SkillStoreActor\nprivate state only"]
+                AuditActor["AuditEventActor\nprivate state only"]
+            end
+        end
+    end
+
+    Outside["❌ No filesystem\n❌ No raw network\n❌ No shared memory\n❌ No process exec\n❌ No env vars"]
+
+    style VM fill:#1A237E,color:#90CAF9,stroke:#283593,stroke-width:2px
+    style WASM fill:#1B5E20,color:#A5D6A7,stroke:#2E7D32,stroke-width:2px
+    style Actor fill:#006064,color:#E0F7FA,stroke:#004D40,stroke-width:2px
+    style AgentActor fill:#01579B,color:#FFFFFF,stroke:#0277BD,stroke-width:2px
+    style SkillActor fill:#4A148C,color:#FFFFFF,stroke:#6A1B9A,stroke-width:2px
+    style AuditActor fill:#1A237E,color:#FFFFFF,stroke:#283593,stroke-width:2px
+    style Outside fill:#B71C1C,color:#FFFFFF,stroke:#D32F2F,stroke-width:2px

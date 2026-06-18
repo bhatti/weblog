@@ -1,0 +1,17 @@
+graph LR
+    Agent["AgentActor"] -->|"ask: completion"| GW["LLMGatewayActor\ncircuit breaker\nnormalized response"]
+
+    GW -->|"HTTPFetch — default"| Ollama["🦙 Ollama :11434\nllama3.2 (local)"]
+    GW -.->|"HTTPFetch — after switch"| Anthropic["🧠 Anthropic API\nclaude-opus-4-8"]
+    GW -.->|"HTTPFetch — after switch"| OpenAI["🤖 OpenAI API\ngpt-4o"]
+    GW -.->|"circuit open → fallback"| Sim["⚠️ Simulated LLM\nkeyword-based"]
+
+    Ops["curl switch_provider"] -->|"hot-swap message\nno restart"| GW
+
+    style Agent fill:#1565C0,color:#FFFFFF,stroke:#0D47A1,stroke-width:2px
+    style GW fill:#6A1B9A,color:#FFFFFF,stroke:#4A148C,stroke-width:2px
+    style Ollama fill:#01579B,color:#FFFFFF,stroke:#0277BD,stroke-width:2px
+    style Anthropic fill:#880E4F,color:#FFFFFF,stroke:#AD1457,stroke-width:2px
+    style OpenAI fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style Sim fill:#4E342E,color:#FFFFFF,stroke:#6D4C41,stroke-width:2px
+    style Ops fill:#E65100,color:#FFFFFF,stroke:#BF360C,stroke-width:2px

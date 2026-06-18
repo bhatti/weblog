@@ -1,0 +1,9 @@
+%%{init: {'theme': 'base', 'themeVariables': {'background': '#1e1e2e', 'mainBkg': '#b7b7c4ff', 'nodeBorder': '#e1d8d8ff', 'lineColor': '#00d4ff', 'textColor': '#cc', 'edgeLabelBackground': '#2a2a3e', 'transitionColor': '#00d4ff'}}}%%
+stateDiagram-v2
+    [*] --> allow: default
+    allow --> review: policy = review
+    review --> approved: human or automated check passes
+    review --> denied: check fails
+    approved --> allow: reset
+    denied --> allow: policy cleared
+    allow --> denied: policy = deny (direct block)

@@ -1,0 +1,16 @@
+graph LR
+    subgraph Cluster["3-node cluster"]
+        Node1["Node 1\nCronSchedulerActor\n🔒 holds DistLock"]
+        Node2["Node 2\nCronSchedulerActor\n⏸ lock not acquired"]
+        Node3["Node 3\nCronSchedulerActor\n⏸ lock not acquired"]
+    end
+
+    Node1 -->|"Channel.send\nat-least-once"| Chan["cron:pending\nChannel"]
+    Chan  -->|"Channel.receive + ack"| AgentActor["AgentActor\nruns in isolated\ncron session"]
+
+    style Node1 fill:#1565C0,color:#FFFFFF,stroke:#0D47A1,stroke-width:2px
+    style Node2 fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px
+    style Node3 fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px
+    style Chan fill:#006064,color:#FFFFFF,stroke:#004D40,stroke-width:2px
+    style AgentActor fill:#880E4F,color:#FFFFFF,stroke:#AD1457,stroke-width:2px
+    style Cluster fill:#0D1B2A,color:#90CAF9,stroke:#1565C0,stroke-width:2px

@@ -1,0 +1,10 @@
+graph LR
+    Full["Full history\n[sys, u1, a1, u2, a2, u3, a3, u4, a4, u5, a5]\ntokens > 75% budget"]
+    Full -->|"ask LLM to summarize\nu1 a1 u2 a2"| Comp["ContextCompressorActor"]
+    Comp --> Keep["Compressed history\n[sys, {SUMMARY}, u3, a3, u4, a4, u5, a5]"]
+    Comp -->|"archive original"| KV["KV\nfull_history_archive:sess\nfor audit or recall"]
+
+    style Full fill:#1565C0,color:#FFFFFF,stroke:#0D47A1,stroke-width:2px
+    style Comp fill:#4E342E,color:#FFFFFF,stroke:#6D4C41,stroke-width:2px
+    style Keep fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style KV fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px

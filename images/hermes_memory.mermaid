@@ -1,0 +1,15 @@
+graph LR
+    subgraph Tiers["MemoryActor — three tiers"]
+        Core["🟢 Core\nAlways in context\nKV only\nsmall, critical facts"]
+        Reach["🟡 Reachable\nLoaded on match\nKV + TupleSpace\nrecent useful facts"]
+        Deep["🔴 Deep\nLoaded on demand\nBlobStorage\nlong-term archives"]
+    end
+
+    Core -->|"promote after N recalls"| Reach
+    Reach -->|"demote after 30 days idle"| Deep
+    Deep -->|"re-promote on match"| Reach
+
+    style Core fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style Reach fill:#E65100,color:#FFFFFF,stroke:#BF360C,stroke-width:2px
+    style Deep fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px
+    style Tiers fill:#0D1B2A,color:#90CAF9,stroke:#1565C0,stroke-width:2px

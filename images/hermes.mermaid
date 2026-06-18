@@ -1,0 +1,61 @@
+graph TB
+    User(["👤 User / HTTP API"])
+
+    subgraph Core["⚙️ Core Agent Loop"]
+        Agent["AgentActor\nConversation loop\ntool orchestration\nKV checkpoint"]
+        LLM["LLMGatewayActor\nProvider routing\ncircuit breaker\nhot-swap"]
+        Tools["ToolExecutorActor\nTool dispatch\nHTTPFetch execution\nruntime registration"]
+    end
+
+    subgraph Learning["🧠 Self-Improvement"]
+        Skills["SkillStoreActor\nSkill match + store\nlifecycle management\nTupleSpace index"]
+        Workflow["SkillExtractionWorkflow\nDurable parallel LLM\ncheckpointed steps\nname+procedure+triggers"]
+    end
+
+    subgraph Memory["💾 Memory & Context"]
+        Mem["MemoryActor\nCore / Reachable / Deep\ntier promotion\nTupleSpace + KV + Blob"]
+        Comp["ContextCompressorActor\nToken budget check\nmiddle-out summarise\narchive original"]
+    end
+
+    subgraph Safety["🛡️ Safety & Compliance"]
+        Guard["GuardrailsGateActor\nGenFSM\nallow→review→approved/denied\nper-tool policies"]
+        Audit["AuditEventActor\nGenEvent fire-and-forget\nTupleSpace append\nnon-blocking"]
+    end
+
+    subgraph Ops["🔧 Operations"]
+        Cron["CronSchedulerActor\nDistLock leader election\nChannel at-least-once\nisolated session"]
+        Sess["SessionManagerActor\nKV session metadata\nchannel+user index\nlifecycle tracking"]
+        Health["HealthMonitorActor\nPoll process groups\nsend_after tick\nTupleSpace snapshot"]
+    end
+
+    User -->|"ask: chat"| Agent
+    Agent -->|"ask: completion"| LLM
+    Agent -->|"ask: execute"| Tools
+    Tools -->|"ask: check_tool"| Guard
+    Agent -->|"ask: match_skills"| Skills
+    Agent -->|"ask: check_and_compress"| Comp
+    Agent -->|"send: log_event"| Audit
+    Agent -->|"ask: recall_memory"| Mem
+    Skills -->|"workflow_run"| Workflow
+    Workflow -->|"ask × 3 parallel"| LLM
+    Cron -->|"DistLock + Channel → ask: chat"| Agent
+    Health -->|"send_after: poll_tick"| Health
+
+    style User fill:#E65100,color:#FFFFFF,stroke:#BF360C,stroke-width:2px
+    style Agent fill:#1565C0,color:#FFFFFF,stroke:#0D47A1,stroke-width:2px
+    style LLM fill:#6A1B9A,color:#FFFFFF,stroke:#4A148C,stroke-width:2px
+    style Tools fill:#1B5E20,color:#FFFFFF,stroke:#2E7D32,stroke-width:2px
+    style Skills fill:#006064,color:#FFFFFF,stroke:#004D40,stroke-width:2px
+    style Workflow fill:#880E4F,color:#FFFFFF,stroke:#AD1457,stroke-width:2px
+    style Mem fill:#33691E,color:#FFFFFF,stroke:#558B2F,stroke-width:2px
+    style Comp fill:#4E342E,color:#FFFFFF,stroke:#6D4C41,stroke-width:2px
+    style Guard fill:#B71C1C,color:#FFFFFF,stroke:#D32F2F,stroke-width:2px
+    style Audit fill:#1A237E,color:#FFFFFF,stroke:#283593,stroke-width:2px
+    style Cron fill:#01579B,color:#FFFFFF,stroke:#0277BD,stroke-width:2px
+    style Sess fill:#37474F,color:#FFFFFF,stroke:#546E7A,stroke-width:2px
+    style Health fill:#2E7D32,color:#FFFFFF,stroke:#388E3C,stroke-width:2px
+    style Core fill:#0D1B2A,color:#90CAF9,stroke:#1565C0,stroke-width:2px
+    style Learning fill:#1A0D2A,color:#CE93D8,stroke:#6A1B9A,stroke-width:2px
+    style Memory fill:#0D2A1A,color:#A5D6A7,stroke:#2E7D32,stroke-width:2px
+    style Safety fill:#2A0D0D,color:#FFCDD2,stroke:#B71C1C,stroke-width:2px
+    style Ops fill:#1A1A0D,color:#FFF59D,stroke:#F9A825,stroke-width:2px
