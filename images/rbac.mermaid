@@ -1,0 +1,9 @@
+erDiagram
+    ORGANIZATION ||--o{ PRINCIPAL : "owns"
+    ORGANIZATION ||--o{ ROLE : "owns"
+    ORGANIZATION ||--o{ RESOURCE : "owns"
+    PRINCIPAL }o--o{ ROLE : "assigned"
+    ROLE }o--o{ ROLE : "inherits"
+    ROLE ||--o{ CLAIM : "grants"
+    CLAIM }o--|| RESOURCE : "on"
+    CLAIM ||--o{ CONSTRAINT : "has"

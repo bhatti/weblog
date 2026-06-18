@@ -1,0 +1,16 @@
+graph TD
+    style FV fill:#1e3a5f,stroke:#1e40af,color:#fff
+    style MC fill:#2563eb,stroke:#1d4ed8,color:#fff
+    style TP fill:#059669,stroke:#047857,color:#fff
+    style DBC fill:#7c3aed,stroke:#6d28d9,color:#fff
+    style SA fill:#d97706,stroke:#b45309,color:#fff
+
+    FV[Formal Verification] --> MC[Model Checking\nTLA+ · SPIN · Alloy]
+    FV --> TP[Theorem Proving\nDafny · Lean · Coq · Isabelle]
+    FV --> DBC[Design by Contract\nEiffel · Dafny · Ada/SPARK]
+    FV --> SA[Static Analysis\nAbstract Interpretation]
+
+    MC -->|Best for| MC2["Concurrent and distributed systems\nProtocols · State machines"]
+    TP -->|Best for| TP2["Algorithms · Data structures\nSecurity properties"]
+    DBC -->|Best for| DBC2["APIs · Invariants\nPre/postconditions"]
+    SA -->|Best for| SA2["Type safety · Null safety\nMemory safety"]

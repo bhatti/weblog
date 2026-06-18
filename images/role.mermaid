@@ -1,0 +1,12 @@
+graph TD
+    style V fill:#059669,stroke:#047857,color:#fff
+    style E fill:#2563eb,stroke:#1d4ed8,color:#fff
+    style A fill:#7c3aed,stroke:#6d28d9,color:#fff
+    style BAD fill:#dc2626,stroke:#b91c1c,color:#fff
+
+    V[viewer\nread:docs]
+    E[editor\nwrite:docs + inherits viewer]
+    A[admin\ndelete:docs + inherits editor]
+    BAD["❌ admin → viewer → editor → admin\n= infinite loop during claim resolution"]
+
+    V --> E --> A

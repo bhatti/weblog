@@ -1,0 +1,11 @@
+flowchart LR
+    style H fill:#2563eb,stroke:#1d4ed8,color:#fff
+    style AI fill:#7c3aed,stroke:#6d28d9,color:#fff
+    style V fill:#059669,stroke:#047857,color:#fff
+    style Rev fill:#d97706,stroke:#b45309,color:#fff
+
+    H[Human\nWrites specs\nDefines invariants\nReviews counterexamples] -->|formal spec| AI
+    AI[AI\nGenerates code\nGenerates tests\nGenerates boilerplate] -->|candidate implementation| V
+    V[Verifier\nDafny proves properties\nTLC checks state space\ngopter tests properties] -->|counterexample or proof| Rev
+    Rev{Passes\nverification?} -->|No — counterexample| H
+    Rev -->|Yes — verified| H
