@@ -1,0 +1,29 @@
+graph TB
+    %% Outer Shell
+    subgraph Shell [" "]
+        ShellTitle["<h3>Imperative Shell (Actions)</h3>HTTP handlers, DB writes, network I/O"]:::shellText
+        
+        %% Middle Core
+        subgraph Core [" "]
+            CoreTitle["<h3>Functional Core (Calculations)</h3>Validation, transformation, routing<br>State derivation, business rules"]:::coreText
+            
+            %% Inner Data
+            subgraph Data [" "]
+                DataTitle["<h3>Data (ADTs)</h3>Events, states, configs, msgs"]:::dataText
+            end
+        end
+    end
+
+    %% Invisible links to force rigid vertical layout & padding
+    ShellTitle ~~~ Core
+    CoreTitle ~~~ Data
+
+    %% Box Styles (Dark, rich background colors)
+    style Shell fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px;
+    style Core fill:#78350f,stroke:#f59e0b,stroke-width:2px;
+    style Data fill:#064e3b,stroke:#10b981,stroke-width:2px;
+
+    %% Text Styles (Guaranteed white text across all modes)
+    classDef shellText fill:none,stroke:none,color:#ffffff;
+    classDef coreText fill:none,stroke:none,color:#ffffff;
+    classDef dataText fill:none,stroke:none,color:#ffffff;
