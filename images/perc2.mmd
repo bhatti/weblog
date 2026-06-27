@@ -1,0 +1,47 @@
+%%{init: {
+  'theme': 'base', 
+  'themeVariables': {
+    'primaryColor': '#1e293b', 
+    'primaryTextColor': '#ffffff',
+    'lineColor': '#f97316', 
+    'edgeLabelBackground': '#334155',
+    'background': '#0f172a',
+    'clusterBkg': '#1e293b',
+    'clusterBorder': '#475569'
+  }
+}}%%
+graph LR
+    subgraph dist ["1000 Request Latencies — Sorted Fastest to Slowest"]
+        direction LR
+        A["Fastest\n1%–98%\n(980 samples)"]:::bulk
+        B["99th\n(1 sample)"]:::single
+        C["Slowest\n1%\n(10 samples)"]:::tail
+    end
+
+    subgraph stats ["What Each Statistic Uses"]
+        P99["p99\n= MAX of A+B\n= 1 single value\n⚠️ ignores shape"]:::single_stat
+        TM99["tm99\n= AVG of A+B\n= 990 samples averaged\n✅ reflects distribution"]:::bulk_stat
+        TMTAIL["TM(99%:)\n= AVG of C\n= 10 samples averaged\n✅ monitor your worst users"]:::tail_stat
+    end
+
+    A --> TM99
+    B --> P99
+    B --> TM99
+    C --> TMTAIL
+
+    %% High-Contrast Class Definitions
+    classDef bulk fill:#2563eb,color:#fff,stroke:#60a5fa,stroke-width:2px
+    classDef single fill:#dc2626,color:#fff,stroke:#f87171,stroke-width:3px
+    classDef tail fill:#ea580c,color:#fff,stroke:#fdba74,stroke-width:2px
+    
+    classDef single_stat fill:#dc2626,color:#fff,stroke:#f87171,stroke-width:3px,font-weight:bold
+    classDef bulk_stat fill:#16a34a,color:#fff,stroke:#4ade80,stroke-width:2px
+    classDef tail_stat fill:#ea580c,color:#fff,stroke:#fdba74,stroke-width:2px
+
+    %% Class Assignments
+    class A bulk
+    class B single
+    class C tail
+    class P99 single_stat
+    class TM99 bulk_stat
+    class TMTAIL tail_stat
