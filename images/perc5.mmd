@@ -1,0 +1,43 @@
+%%{init: {
+  'theme': 'base', 
+  'themeVariables': {
+    'primaryColor': '#0f766e', 
+    'primaryTextColor': '#ffffff',
+    'lineColor': '#f97316', 
+    'background': '#0f172a',
+    'clusterBkg': '#1e293b',
+    'clusterBorder': '#334155'
+  }
+}}%%
+graph LR
+    subgraph canary ["🐦 Canary Setup"]
+        C["Canary Process\n(runs every 60s)"] -->|"Full workflow"| API["Your API"]
+        API --> DB["Database"]
+        API --> Cache["Cache"]
+        API --> ExtSvc["External\nService"]
+        API -->|"Result"| C
+
+        C --> M1["🟢 First-attempt\nsuccess rate\n(separate metric)"]
+        C --> M2["🟡 Final success\nafter retries\n(separate metric)"]
+        C --> M3["⏱️ End-to-end\nlatency\n(separate metric)"]
+    end
+
+    subgraph prod ["📊 Production Traffic"]
+        RT["Real Traffic\nmetrics"] --> P1["5xx rate"]
+        RT --> P2["p99 latency"]
+        RT --> P3["Request volume"]
+    end
+
+    M1 & M2 & M3 -. "Never mix with\nprod metrics!" .-> WARN["⚠️ Keep\nCanary vs Prod\nOBSERVABILITY\nSEPARATE"]
+
+    %% High-Contrast Class Definitions
+    classDef ok fill:#16a34a,color:#fff,stroke:#4ade80,stroke-width:2px
+    classDef warn fill:#dc2626,color:#fff,stroke:#f87171,stroke-width:3px,font-weight:bold
+    classDef neutral fill:#2563eb,color:#fff,stroke:#60a5fa,stroke-width:2px
+    classDef canary fill:#0d9488,color:#fff,stroke:#2dd4bf,stroke-width:2px
+
+    %% Class Assignments
+    class M1,M2,M3 ok
+    class WARN warn
+    class RT,P1,P2,P3 neutral
+    class C,API,DB,Cache,ExtSvc canary

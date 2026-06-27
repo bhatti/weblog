@@ -1,0 +1,37 @@
+%%{init: {
+  'theme': 'base', 
+  'themeVariables': {
+    'primaryColor': '#1e3a8a', 
+    'primaryTextColor': '#ffffff',
+    'lineColor': '#ea580c', 
+    'background': '#0f172a',
+    'clusterBkg': '#1e293b',
+    'clusterBorder': '#334155'
+  }
+}}%%
+graph TD
+    subgraph fanout ["⚡ Parallel Fan-Out (wait for ALL to complete)"]
+        FE["Frontend"] --> S1["Service A\n~10ms"]
+        FE --> S2["Service B\n~10ms"]
+        FE --> S3["Service C\n~10ms"]
+        FE --> SN["Service N\n💀 250ms today"]
+        S1 & S2 & S3 & SN --> RESP["Response\n= MAX of all = 250ms"]
+    end
+
+    subgraph chain ["🔗 Serial Chain (each calls the next)"]
+        C1["Client"] --> C2["Gateway\n12ms"]
+        C2 --> C3["Auth\n8ms"]
+        C3 --> C4["BizLogic\n💀 200ms"]
+        C4 --> C5["DB\n15ms"]
+        C5 --> CRESP["Response\n= SUM = 235ms"]
+    end
+
+    %% High-Contrast Class Definitions
+    classDef normal fill:#2563eb,color:#fff,stroke:#60a5fa,stroke-width:2px
+    classDef slow fill:#dc2626,color:#fff,stroke:#f87171,stroke-width:3px
+    classDef result fill:#16a34a,color:#fff,stroke:#4ade80,stroke-width:2px
+
+    %% Class Assignments
+    class FE,S1,S2,S3,C1,C2,C3,C5 normal
+    class SN,C4 slow
+    class RESP,CRESP result

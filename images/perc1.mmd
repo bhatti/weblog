@@ -1,0 +1,18 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e40af', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#1e3a8a', 'lineColor': '#f59e0b', 'secondaryColor': '#065f46', 'tertiaryColor': '#7c3aed', 'background': '#f8fafc', 'mainBkg': '#1e40af', 'nodeBorder': '#1e3a8a', 'clusterBkg': '#dbeafe', 'titleColor': '#1e3a8a', 'edgeLabelBackground': '#1e293b'}}}%%
+graph TD
+    A["🖥️ User Request"] --> B{Does it succeed?}
+    B -->|"✅ HTTP 2xx"| C{Fast enough?}
+    B -->|"❌ HTTP 5xx / timeout"| E["🔴 UNAVAILABLE\nServer error"]
+    B -->|"⚠️ HTTP 4xx"| F["🔘 USER ERROR\nNot a service failure"]
+    C -->|"< SLA threshold"| G["🟢 AVAILABLE"]
+    C -->|"> SLA threshold"| H["🔴 UNAVAILABLE\nLatency SLA breach"]
+    classDef red fill:#dc2626,color:#fff,stroke:#991b1b
+    classDef green fill:#16a34a,color:#fff,stroke:#15803d
+    classDef gray fill:#6b7280,color:#fff,stroke:#4b5563
+    classDef blue fill:#1e40af,color:#fff,stroke:#1e3a8a
+    classDef decision fill:#7c3aed,color:#fff,stroke:#6d28d9
+    class E,H red
+    class G green
+    class F gray
+    class A blue
+    class B,C decision

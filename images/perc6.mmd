@@ -1,0 +1,66 @@
+%%{init: {
+  'theme': 'base', 
+  'themeVariables': {
+    'primaryColor': '#1e293b', 
+    'primaryTextColor': '#ffffff',
+    'lineColor': '#f97316', 
+    'edgeLabelBackground': '#334155',
+    'background': '#0f172a',
+    'clusterBkg': '#1e293b',
+    'clusterBorder': '#475569'
+  }
+}}%%
+graph TD
+    subgraph L1 ["🔴 Layer 1 — Real-Time Health (1-min window, pages on-call)"]
+        A1["5xx error rate > 0.1%"]
+        A2["p99 latency > SLA threshold"]
+        A3["Request volume drop > 50%\n(silent failure!)"]
+    end
+
+    subgraph L2 ["🟡 Layer 2 — Availability Quality (5-min window, tickets)"]
+        B1["tm99 latency trend\n(bulk customer experience)"]
+        B2["TM(99%:) latency\n(outlier watchdog)"]
+        B3["Error budget burn rate > 2x"]
+    end
+
+    subgraph L3 ["🟢 Layer 3 — Capacity Leading Indicators (15-min window)"]
+        C1["p99.9 latency drift\n(early overload warning)"]
+        C2["Retry rate as % of traffic\n(amplification risk)"]
+        C3["Queue depth on downstreams"]
+        C4["Client 4xx rate spike\n(misbehaving caller?)"]
+    end
+
+    subgraph L4 ["🐦 Layer 4 — Canaries (every 60s, independent of prod traffic)"]
+        D1["First-attempt success rate"]
+        D2["Final success rate (after retries)"]
+        D3["End-to-end workflow latency"]
+    end
+
+    subgraph HC ["🏥 Health Checks (Kubernetes probes)"]
+        E1["Readiness: dep connectivity\n+ lightweight functional test"]
+        E2["Liveness: deadlock detection\n(NOT the same as readiness!)"]
+    end
+
+    %% Flow Mechanics
+    L1 -->|"Breach triggers"| PAGE["📟 Page On-Call"]
+    L2 -->|"Breach triggers"| TICKET["🎫 Create Ticket"]
+    L3 -->|"Trends trigger"| REVIEW["📊 Capacity Review"]
+    L4 -->|"Failure triggers"| PAGE
+    HC -->|"Fail readiness"| DRAIN["🚫 Remove from\nLoad Balancer Pool"]
+    HC -->|"Fail liveness"| RESTART["♻️ Kill & Restart Pod"]
+
+    %% High-Contrast Class Definitions
+    classDef red fill:#dc2626,color:#fff,stroke:#f87171,stroke-width:2px
+    classDef yellow fill:#eab308,color:#000,stroke:#fef08a,stroke-width:2px,font-weight:bold
+    classDef green fill:#16a34a,color:#fff,stroke:#4ade80,stroke-width:2px
+    classDef blue fill:#2563eb,color:#fff,stroke:#60a5fa,stroke-width:2px
+    classDef purple fill:#9333ea,color:#fff,stroke:#c084fc,stroke-width:2px
+    classDef action fill:#0d9488,color:#fff,stroke:#2dd4bf,stroke-width:2px,font-weight:bold
+
+    %% Class Assignments
+    class A1,A2,A3 red
+    class B1,B2,B3 yellow
+    class C1,C2,C3,C4 green
+    class D1,D2,D3 blue
+    class E1,E2 purple
+    class PAGE,TICKET,REVIEW,DRAIN,RESTART action

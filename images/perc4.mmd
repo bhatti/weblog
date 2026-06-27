@@ -1,0 +1,21 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#7c3aed', 'lineColor': '#f59e0b', 'edgeLabelBackground': '#fef3c7', 'background': '#faf5ff'}}}%%
+graph LR
+    U["👤 User\n1 request"] -->|"3 retries"| GW["API Gateway"]
+    GW -->|"3 retries each"| SA["Service A"]
+    SA -->|"3 retries each"| SB["Service B 💀\nOverloaded!"]
+
+    GW -. "3 requests" .-> SA
+    SA -. "9 requests" .-> SB_note["9 requests arrive\nat Service B"]
+    U -. "27 actual\nrequests to B\nfrom 1 user click" .-> math["3 × 3 × 3 = 27 🔥"]
+
+    classDef user fill:#1e40af,color:#fff,stroke:#1e3a8a
+    classDef service fill:#7c3aed,color:#fff,stroke:#6d28d9
+    classDef broken fill:#dc2626,color:#fff,stroke:#991b1b
+    classDef math fill:#d97706,color:#fff,stroke:#b45309
+    classDef note fill:#065f46,color:#fff,stroke:#064e3b
+
+    class U user
+    class GW,SA service
+    class SB broken
+    class math math
+    class SB_note note

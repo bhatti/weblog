@@ -1,0 +1,26 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#7c3aed', 'lineColor': '#f59e0b', 'background': '#faf5ff', 'edgeLabelBackground': '#fef3c7'}}}%%
+graph LR
+    subgraph dist ["1000 Request Latencies — Sorted Fastest to Slowest"]
+        direction LR
+        A["Fastest\n1%–98%\n(980 samples)"]:::bulk
+        B["99th\n(1 sample)"]:::single
+        C["Slowest\n1%\n(10 samples)"]:::tail
+    end
+
+    subgraph stats ["What Each Statistic Uses"]
+        P99["p99\n= MAX of A+B\n= 1 single value\n⚠️ ignores shape"]:::single_stat
+        TM99["tm99\n= AVG of A+B\n= 990 samples averaged\n✅ reflects distribution"]:::bulk_stat
+        TMTAIL["TM(99%:)\n= AVG of C\n= 10 samples averaged\n✅ monitor your worst users"]:::tail_stat
+    end
+
+    A --> TM99
+    B --> P99
+    B --> TM99
+    C --> TMTAIL
+
+    classDef bulk fill:#1e40af,color:#fff,stroke:#1e3a8a
+    classDef single fill:#dc2626,color:#fff,stroke:#991b1b
+    classDef tail fill:#d97706,color:#fff,stroke:#b45309
+    classDef single_stat fill:#dc2626,color:#fff,stroke:#991b1b
+    classDef bulk_stat fill:#16a34a,color:#fff,stroke:#15803d
+    classDef tail_stat fill:#d97706,color:#fff,stroke:#b45309
