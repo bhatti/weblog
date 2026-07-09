@@ -1,0 +1,13 @@
+flowchart LR
+    Prompt(["Prompt + context"]) --> Fast["Fast model<br/>(cheap executor)"]
+    Fast --> Conf{"Confidence ≥<br/>threshold?"}
+    Conf -- yes --> Return["Return fast result"]
+    Conf -- no --> Escalate["Escalate to advisor<br/>(expensive model)"]
+    Escalate --> Return2["Return advisor result"]
+
+    classDef cheap fill:#059669,stroke:#064e3b,stroke-width:2px,color:#ffffff
+    classDef expensive fill:#dc2626,stroke:#7f1d1d,stroke-width:2px,color:#ffffff
+    classDef decision fill:#d97706,stroke:#78350f,stroke-width:2px,color:#ffffff
+    class Fast,Return cheap
+    class Escalate,Return2 expensive
+    class Conf decision

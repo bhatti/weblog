@@ -1,0 +1,14 @@
+flowchart TD
+    Sup["Supervisor<br/>strategy: one_for_one"] --> Agent1["AgentActor<br/>scenario 1"]
+    Sup --> Agent2["AgentActor<br/>scenario 2"]
+    Sup --> Agent3["AgentActor<br/>scenario 3 — crashed"]
+    Sup --> Eval["EvalRunnerActor"]
+    Sup --> Scorer["ScorerActor"]
+    Agent3 -. "restarted in isolation" .-> Sup
+
+    classDef ok fill:#059669,stroke:#064e3b,stroke-width:2px,color:#ffffff
+    classDef crash fill:#dc2626,stroke:#7f1d1d,stroke-width:2px,color:#ffffff
+    classDef sup fill:#2563eb,stroke:#1e3a8a,stroke-width:2px,color:#ffffff
+    class Sup sup
+    class Agent1,Agent2,Eval,Scorer ok
+    class Agent3 crash

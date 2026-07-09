@@ -1,0 +1,20 @@
+flowchart TD
+    Start(["Task received"]) --> Check{"Budget or<br/>iteration limit hit?"}
+    Check -- "exceeded" --> Finalize["Finalize trajectory<br/>(budget_exceeded)"]
+    Check -- "ok" --> Observe["Observe<br/>load prior context from KV"]
+    Observe --> Orient["Orient<br/>ask LLM Gateway for a plan"]
+    Orient --> Decide["Decide<br/>pick an action"]
+    Decide --> Approval{"Needs human<br/>approval?"}
+    Approval -- "yes" --> Suspend["Suspend<br/>durable pause"]
+    Approval -- "no" --> Act["Act<br/>run tool through<br/>SchemaValidationFacet"]
+    Act --> Check
+    Finalize --> Export["Export trajectory<br/>to KV + TupleSpace"]
+
+    classDef step fill:#2563eb,stroke:#1e3a8a,stroke-width:2px,color:#ffffff
+    classDef decision fill:#d97706,stroke:#78350f,stroke-width:2px,color:#ffffff
+    classDef terminal fill:#059669,stroke:#064e3b,stroke-width:2px,color:#ffffff
+    classDef suspend fill:#7c3aed,stroke:#4c1d95,stroke-width:2px,color:#ffffff
+    class Observe,Orient,Act step
+    class Check,Approval decision
+    class Finalize,Export terminal
+    class Suspend suspend

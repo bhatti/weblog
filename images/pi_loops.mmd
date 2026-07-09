@@ -1,0 +1,25 @@
+flowchart TB
+    subgraph Outer[" Outer loop — the engineer owns this "]
+        direction TB
+        O1[Decide] --> O2[Verify] --> O3[Approve] --> O4[Own]
+        O4 -.->|next cycle| O1
+
+        subgraph Inner[" Inner loop — the agent owns this "]
+            direction LR
+            I1[Investigate] --> I2[Implement] --> I3[Test] --> I4[Report]
+            I4 -.->|next task| I1
+        end
+
+        O2 == "trajectory as evidence" ==> Inner
+        O3 -. "green-lights" .-> I1
+    end
+
+    classDef inner fill:#2563eb,stroke:#1e3a8a,stroke-width:2px,color:#ffffff
+    classDef outer fill:#d97706,stroke:#78350f,stroke-width:2px,color:#ffffff
+    classDef innerBox fill:#eff6ff,stroke:#1e3a8a,stroke-width:2px,color:#1e3a8a,font-weight:bold
+    classDef outerBox fill:#fffbeb,stroke:#78350f,stroke-width:2px,color:#78350f,font-weight:bold
+
+    class I1,I2,I3,I4 inner
+    class O1,O2,O3,O4 outer
+    class Inner innerBox
+    class Outer outerBox

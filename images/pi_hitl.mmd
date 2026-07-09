@@ -1,0 +1,29 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+  'lineColor': '#334155',
+  'textColor': '#0f172a',
+  'stateBkg': '#f8fafc',
+  'stateLabelColor': '#0f172a',
+  'transitionColor': '#334155',
+  'transitionLabelColor': '#0f172a',
+  'labelBoxBkgColor': '#ffffff',
+  'labelBoxBorderColor': '#334155',
+  'edgeLabelBackground': '#ffffff',
+  'compositeBackground': '#f1f5f9',
+  'altBackground': '#f1f5f9'
+}}}%%
+stateDiagram-v2
+    direction LR
+
+    [*] --> idle
+
+    idle --> awaiting_approval: request_approval
+    awaiting_approval --> idle: approve / reject
+    awaiting_approval --> awaiting_approval: new request (busy)
+
+    idle --> [*]
+
+    classDef idleStyle fill:#059669,stroke:#064e3b,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef waitStyle fill:#d97706,stroke:#78350f,stroke-width:2px,color:#ffffff,font-weight:bold
+
+    class idle idleStyle
+    class awaiting_approval waitStyle

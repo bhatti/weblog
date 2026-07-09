@@ -1,0 +1,19 @@
+flowchart TD
+    ER["EvalRunnerActor<br/>(WorkflowActor)"] -- spawn --> A1["AgentActor<br/>sc-math-01"]
+    ER -- spawn --> A2["AgentActor<br/>sc-search-01"]
+    ER -- spawn --> A3["AgentActor<br/>sc-calc-01"]
+    A1 -- trajectory --> TS[("TupleSpace")]
+    A2 -- trajectory --> TS
+    A3 -- trajectory --> TS
+    TS -- collect --> ER
+    ER -- score --> SC["ScorerActor"]
+    SC -- scores --> RD["RegressionDetectorActor"]
+
+    classDef runner fill:#2563eb,stroke:#1e3a8a,stroke-width:2px,color:#ffffff
+    classDef agent fill:#059669,stroke:#064e3b,stroke-width:2px,color:#ffffff
+    classDef store fill:#d97706,stroke:#78350f,stroke-width:2px,color:#ffffff
+    classDef score fill:#7c3aed,stroke:#4c1d95,stroke-width:2px,color:#ffffff
+    class ER runner
+    class A1,A2,A3 agent
+    class TS store
+    class SC,RD score

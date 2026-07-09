@@ -1,0 +1,10 @@
+flowchart LR
+    A["Model<br/>reasoning & generation"] --> C{{Agent}}
+    B["Harness<br/>loop · tools · state<br/>coordination · eval"] --> C
+
+    classDef model fill:#2563eb,stroke:#1e3a8a,stroke-width:2px,color:#ffffff
+    classDef harness fill:#059669,stroke:#064e3b,stroke-width:2px,color:#ffffff
+    classDef agent fill:#7c3aed,stroke:#4c1d95,stroke-width:2px,color:#ffffff
+    class A model
+    class B harness
+    class C agent

@@ -1,0 +1,59 @@
+flowchart TB
+    subgraph Runtime[" One PlexSpaces node — production and eval share it "]
+        direction TB
+
+        subgraph CoreLoop[" Core agent loop "]
+            direction LR
+            Agent(["AgentActor<br/>(OODA loop)"])
+            LLM(["LLMGatewayActor"])
+            Tools(["ToolRegistryActor"])
+            Approval(["ApprovalGateActor"])
+            Advisor(["AdvisorActor"])
+            Agent --> LLM
+            Agent --> Tools
+            Agent --> Approval
+            Agent --> Advisor
+        end
+
+        subgraph EvalPipe[" Eval pipeline "]
+            direction LR
+            Scenarios(["ScenarioStoreActor"])
+            Eval(["EvalRunnerActor"])
+            Scorer(["ScorerActor"])
+            Traj(["TrajectoryStoreActor"])
+            Eval --> Scenarios
+            Eval --> Agent
+            Eval --> Scorer
+            Scorer --> Traj
+        end
+
+        subgraph Reporting[" Analysis & reporting "]
+            direction LR
+            Regress(["RegressionDetectorActor"])
+            Bench(["BenchmarkActor"])
+            Dash(["DashboardActor"])
+            Scorer --> Regress
+            Bench --> Eval
+            Regress --> Dash
+            Bench --> Dash
+            Eval --> Dash
+        end
+    end
+
+    classDef core fill:#1d4ed8,stroke:#1e3a8a,stroke-width:2px,color:#ffffff
+    classDef eval fill:#9333ea,stroke:#581c87,stroke-width:2px,color:#ffffff
+    classDef report fill:#ea580c,stroke:#7c2d12,stroke-width:2px,color:#ffffff
+
+    classDef coreBg fill:#eff6ff,stroke:#1d4ed8,stroke-width:2px,color:#1e3a8a,font-weight:bold
+    classDef evalBg fill:#faf5ff,stroke:#9333ea,stroke-width:2px,color:#581c87,font-weight:bold
+    classDef reportBg fill:#fff7ed,stroke:#ea580c,stroke-width:2px,color:#7c2d12,font-weight:bold
+    classDef runtimeBg fill:#f8fafc,stroke:#475569,stroke-width:2px,color:#1e293b,font-weight:bold
+
+    class Agent,LLM,Tools,Approval,Advisor core
+    class Scenarios,Eval,Scorer,Traj eval
+    class Regress,Bench,Dash report
+
+    class CoreLoop coreBg
+    class EvalPipe evalBg
+    class Reporting reportBg
+    class Runtime runtimeBg

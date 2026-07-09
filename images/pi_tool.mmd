@@ -1,0 +1,13 @@
+flowchart LR
+    Msg(["Incoming tool call"]) --> SV["SchemaValidationFacet<br/>priority 95"]
+    SV -- "invalid" --> Reject["Rejected<br/>before the actor ever sees it"]
+    SV -- "valid" --> DF["DurabilityFacet<br/>priority 90"]
+    DF --> TF["ExecutionTraceFacet<br/>priority 85"]
+    TF --> Actor["Your actor code"]
+
+    classDef facet fill:#7c3aed,stroke:#4c1d95,stroke-width:2px,color:#ffffff
+    classDef reject fill:#dc2626,stroke:#7f1d1d,stroke-width:2px,color:#ffffff
+    classDef actor fill:#059669,stroke:#064e3b,stroke-width:2px,color:#ffffff
+    class SV,DF,TF facet
+    class Reject reject
+    class Actor actor
