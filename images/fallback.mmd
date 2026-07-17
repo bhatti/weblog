@@ -1,0 +1,23 @@
+flowchart TD
+    A(["getSecret() called"]) --> B{"Encrypted store<br/>available?"}
+    B -->|yes| C["✅ Return store value<br/>(the ONE real source of truth)"]
+    B -->|"no — fails silently"| D{"Config file has<br/>a token?"}
+    D -->|yes| E["⚠️ Return file value<br/>(could be stale or the default)"]
+    D -->|"no — fails silently"| F["🚫 Return random bytes<br/>(structurally valid, always wrong)"]
+
+    C --> G["Caller signs a JWT<br/>with whatever it got back"]
+    E --> G
+    F --> G
+    G --> H(["Peers verify the token"])
+    H -->|"signed with C"| OK["✅ Authenticates"]
+    H -->|"signed with E or F"| FAIL["❌ 401 — silent, hours later,<br/>in a completely different log"]
+
+    classDef safe fill:#14532d,stroke:#ffffff,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef warn fill:#7a5c00,stroke:#ffffff,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef danger fill:#7a1f1f,stroke:#ffffff,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef neutral fill:#1e3a5f,stroke:#ffd60a,stroke-width:2px,color:#ffffff,font-weight:bold
+
+    class C,OK safe
+    class E warn
+    class F,FAIL danger
+    class A,B,D,G,H neutral
