@@ -1,0 +1,40 @@
+%%{init: {'theme':'base', 'themeVariables': {
+  'primaryColor':'#2563eb','primaryTextColor':'#ffffff','primaryBorderColor':'#1e3a8a',
+  'lineColor':'#f59e0b','secondaryColor':'#059669','tertiaryColor':'#7c3aed',
+  'background':'#0f172a','mainBkg':'#2563eb','textColor':'#ffffff','clusterBkg':'#1e293b',
+  'clusterBorder':'#f59e0b','edgeLabelBackground':'#1e293b'
+}}}%%
+flowchart LR
+    subgraph LAPTOP["💻 Laptop"]
+        A1[Actor: Go / TS / Python / Rust]
+    end
+    subgraph DOCKER["🐳 Docker"]
+        A2[Same WASM module]
+    end
+    subgraph K8S["☸️ Kubernetes"]
+        A3[Same WASM module]
+    end
+    subgraph CLOUD["☁️ Any Cloud / On-Prem"]
+        A4[Same WASM module]
+    end
+
+    A1 -. identical binary .-> A2
+    A2 -. identical binary .-> A3
+    A3 -. identical binary .-> A4
+
+    A2 <==> MESH{{gRPC Actor Mesh}}
+    A3 <==> MESH
+    A4 <==> MESH
+
+    MESH --> KV[(Durable KV + Alarms)]
+    MESH --> OBS[Prometheus / OTLP]
+    MESH --> EVT[Event Bus + Webhooks]
+
+    style LAPTOP fill:#1e293b,stroke:#f59e0b,color:#ffffff
+    style DOCKER fill:#1e293b,stroke:#f59e0b,color:#ffffff
+    style K8S fill:#1e293b,stroke:#f59e0b,color:#ffffff
+    style CLOUD fill:#1e293b,stroke:#f59e0b,color:#ffffff
+    style MESH fill:#7c3aed,stroke:#4c1d95,color:#ffffff
+    style KV fill:#059669,stroke:#065f46,color:#ffffff
+    style OBS fill:#059669,stroke:#065f46,color:#ffffff
+    style EVT fill:#059669,stroke:#065f46,color:#ffffff
