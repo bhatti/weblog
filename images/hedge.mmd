@@ -1,0 +1,17 @@
+%%{init: {'theme':'base', 'themeVariables': { 'actorBkg': '#2563eb', 'actorTextColor': '#ffffff', 'actorBorder': '#1e3a8a', 'signalColor': '#334155', 'signalTextColor': '#0f172a', 'labelBoxBkgColor': '#059669', 'labelBoxBorderColor': '#064e3b', 'labelTextColor': '#ffffff', 'noteBkgColor': '#f59e0b', 'noteTextColor': '#1f2937', 'noteBorderColor': '#b45309', 'activationBkgColor': '#93c5fd', 'activationBorderColor': '#1e3a8a'}}}%%
+sequenceDiagram
+    participant O as Orchestrator
+    participant S1 as Service 1 (fast, 10ms)
+    participant S2 as Service 2 (medium, 50ms)
+    participant S3 as Service 3 (slow, 200ms)
+    participant S4 as Service 4 (very slow, 500ms)
+
+    O->>S1: request
+    O->>S2: request
+    O->>S3: request
+    O->>S4: request
+    S1-->>O: response (10ms)
+    S2-->>O: response (50ms)
+    Note over O: K=2 collected — cancel the rest
+    O--xS3: cancel
+    O--xS4: cancel
