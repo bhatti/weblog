@@ -1,0 +1,26 @@
+flowchart LR
+    subgraph interface[" 📱 Interface "]
+        A["Slack or CLI<br/><i>@bot standup</i> · <i>@bot review &lt;url&gt;</i> · <i>@bot implement</i>"]
+    end
+
+    subgraph orchestration[" ⚙️ Orchestration — Formicary Queen "]
+        B["Socket Mode (built-in) · verb → job-type routing<br/>YAML workflows · cron / event triggers<br/>pause / resume · retry · approval gates · artifacts"]
+    end
+
+    subgraph execution[" 🐳 Execution — ai-dev-tools "]
+        C["Docker image · Python scripts · claude CLI · gh CLI · jira CLI<br/>hands off state via files in /workspace/&lbrace;issue-id&rbrace;/"]
+    end
+
+    subgraph knowledge[" 📖 Knowledge — you-got-skills "]
+        D["28 Markdown files · portable · tracked in git"]
+    end
+
+    A -- "@mention / DM" --> B
+    B -- "runs containers" --> C
+    C -- "invokes" --> D
+    B -- "posts result to thread" --> A
+
+    style interface fill:#1a6bc4,color:#ffffff,stroke:#0d4a8a,stroke-width:2px
+    style orchestration fill:#b45309,color:#ffffff,stroke:#7c3a04,stroke-width:2px
+    style execution fill:#6d28d9,color:#ffffff,stroke:#4c1d95,stroke-width:2px
+    style knowledge fill:#0f766e,color:#ffffff,stroke:#0a4f4a,stroke-width:2px

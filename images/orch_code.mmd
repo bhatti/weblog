@@ -1,0 +1,44 @@
+flowchart LR
+    CRON(["⏰ Cron<br/>every 5 min"])
+    PICK["🏷️ issue-picker<br/>picks ai-ready issues"]
+    PLAN["📝 plan<br/>Claude reads issue<br/>writes plan.md"]
+    IMPL["💻 implement<br/>Claude writes code<br/>runs tests · commits"]
+    SELFREV["🔍 self-review<br/>diff vs. plan"]
+    PR["🔀 create-pr<br/>opens PR · pings Slack"]
+    POLL["👁️ poll-pr<br/>checks comments<br/>every 2 min"]
+    FEEDBACK{"ai-bot<br/>comment?"}
+    RESPOND["🤖 apply feedback<br/>commit · push"]
+    MERGED{"PR<br/>merged?"}
+    LEARN["🧠 learn<br/>writes learnings.md"]
+    DONE(["✅ Done"])
+    BLOCKED(["🚫 PAUSED<br/>needs a human"])
+
+    CRON --> PICK
+    PICK -->|"issues found"| PLAN
+    PLAN -->|"exit 2"| BLOCKED
+    PLAN -->|"exit 0"| IMPL
+    IMPL --> SELFREV
+    SELFREV -->|"exit 2"| BLOCKED
+    SELFREV -->|"exit 0"| PR
+    PR --> POLL
+    POLL --> FEEDBACK
+    FEEDBACK -->|"yes"| RESPOND
+    RESPOND --> POLL
+    FEEDBACK -->|"no"| MERGED
+    MERGED -->|"not yet — wait 2 min"| POLL
+    MERGED -->|"yes"| LEARN
+    LEARN --> DONE
+
+    style CRON fill:#1a6bc4,color:#ffffff,stroke:#0d4a8a,stroke-width:2px
+    style PICK fill:#1a6bc4,color:#ffffff,stroke:#0d4a8a,stroke-width:2px
+    style PLAN fill:#0e7c4a,color:#ffffff,stroke:#084d2e,stroke-width:2px
+    style IMPL fill:#0e7c4a,color:#ffffff,stroke:#084d2e,stroke-width:2px
+    style SELFREV fill:#b45309,color:#ffffff,stroke:#7c3a04,stroke-width:2px
+    style PR fill:#0e7c4a,color:#ffffff,stroke:#084d2e,stroke-width:2px
+    style POLL fill:#b45309,color:#ffffff,stroke:#7c3a04,stroke-width:2px
+    style FEEDBACK fill:#b45309,color:#ffffff,stroke:#7c3a04,stroke-width:2px
+    style RESPOND fill:#b45309,color:#ffffff,stroke:#7c3a04,stroke-width:2px
+    style MERGED fill:#b45309,color:#ffffff,stroke:#7c3a04,stroke-width:2px
+    style LEARN fill:#6d28d9,color:#ffffff,stroke:#4c1d95,stroke-width:2px
+    style DONE fill:#0f766e,color:#ffffff,stroke:#0a4f4a,stroke-width:2px
+    style BLOCKED fill:#be123c,color:#ffffff,stroke:#881337,stroke-width:2px
