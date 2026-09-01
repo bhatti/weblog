@@ -1,0 +1,23 @@
+graph TD
+    subgraph Book["Book Ch5 — one process, one actor"]
+        A["mpsc::channel(32)"] --> B["StorageActor<br/>all keys, one machine"]
+    end
+    subgraph PS["PlexSpaces — distributed shard group"]
+        C["create_shard_group<br/>partition_strategy: hash<br/>placements: node-1 ×3 + node-2 ×3"] --> D["StorageActor<br/>shard 0 · node-1"]
+        C --> E["StorageActor<br/>shard 1 · node-1"]
+        C --> F["StorageActor<br/>shard 2 · node-1"]
+        C --> G["StorageActor<br/>replica 0 · node-2"]
+        C --> H["StorageActor<br/>replica 1 · node-2"]
+        C --> I["StorageActor<br/>replica 2 · node-2"]
+    end
+
+    style Book fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0369a1;
+    style PS fill:#fae8ff,stroke:#d946ef,stroke-width:2px,color:#86198f;
+
+    classDef bookNode fill:#0ea5e9,stroke:#0369a1,stroke-width:2px,color:#ffffff;
+    classDef groupNode fill:#f43f5e,stroke:#9f1239,stroke-width:2px,color:#ffffff;
+    classDef shardNode fill:#a855f7,stroke:#6b21a8,stroke-width:2px,color:#ffffff;
+
+    class A,B bookNode;
+    class C groupNode;
+    class D,E,F,G,H,I shardNode;
