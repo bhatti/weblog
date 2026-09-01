@@ -1,0 +1,8 @@
+flowchart LR
+    CA["Client A"] --> VA["ConnectionActor/client-a<br/>in_multi: true<br/>queued: [SET tx:1, INCR counter]"]
+    CB["Client B"] --> VB["ConnectionActor/client-b<br/>in_multi: false<br/>queued: []"]
+
+    classDef actorNode fill:#0d9488,stroke:#134e4a,stroke-width:2px,color:#ffffff;
+    classDef clientNode fill:#ea580c,stroke:#7c2d12,stroke-width:2px,color:#ffffff;
+    class VA,VB actorNode;
+    class CA,CB clientNode;
