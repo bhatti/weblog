@@ -1,0 +1,33 @@
+flowchart LR
+    subgraph ORCH["Rigid Orchestration"]
+        direction TB
+        C1["Coordinator<br/>(single point of failure)"]
+        A1["Agent A"]
+        A2["Agent B"]
+        A3["Agent C"]
+        C1 --> A1
+        C1 --> A2
+        C1 --> A3
+        A1 -.->|"result must route<br/>back through coordinator"| C1
+        A2 -.-> C1
+        A3 -.-> C1
+    end
+
+    subgraph BB["Blackboard / Shared State"]
+        direction TB
+        TS[("Tuple Space")]
+        B1["Agent A"]
+        B2["Agent B"]
+        B3["Agent C"]
+        B1 <--> TS
+        B2 <--> TS
+        B3 <--> TS
+    end
+
+    classDef coordinator fill:#b91c1c,stroke:#7f1d1d,color:#ffffff,stroke-width:2px
+    classDef agent fill:#1d4ed8,stroke:#1e3a8a,color:#ffffff,stroke-width:2px
+    classDef store fill:#15803d,stroke:#14532d,color:#ffffff,stroke-width:2px
+
+    class C1 coordinator
+    class A1,A2,A3,B1,B2,B3 agent
+    class TS store
