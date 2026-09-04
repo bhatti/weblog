@@ -1,0 +1,17 @@
+flowchart TD
+    TS[("Tuple Space<br/>pattern-matched, shared")]
+
+    W["Research Agent<br/>write() / Linda out()"] -->|"deposit a finding —<br/>tuple stays in the space"| TS
+    R["Analysis Agent<br/>read() / Linda rd()"] -->|"non-destructive read —<br/>tuple stays for others too"| TS
+    TK["Worker Agent<br/>take() / Linda in()"] -->|"atomic claim request"| TS
+    TS -->|"tuple removed —<br/>no other worker can claim it"| TK
+
+    classDef store fill:#15803d,stroke:#14532d,color:#ffffff,stroke-width:2px
+    classDef writer fill:#1d4ed8,stroke:#1e3a8a,color:#ffffff,stroke-width:2px
+    classDef reader fill:#7c3aed,stroke:#4c1d95,color:#ffffff,stroke-width:2px
+    classDef taker fill:#b45309,stroke:#78350f,color:#ffffff,stroke-width:2px
+
+    class TS store
+    class W writer
+    class R reader
+    class TK taker
