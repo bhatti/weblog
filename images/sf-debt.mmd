@@ -1,0 +1,20 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4ECDC4', 'primaryTextColor': '#2D3436', 'lineColor': '#2D3436'}}}%%
+graph TD
+    AI["🤖 AI Accelerates..."]
+
+    T["💻 Technical Debt<br/><i>lives in code</i>"]
+    C["🧠 Cognitive Debt<br/><i>lives in people</i>"]
+    I["📄 Intent Debt<br/><i>lives in artifacts</i>"]
+
+    AI -->|"amplifies & repairs"| T
+    AI -->|"amplifies > repairs"| C
+    AI -->|"amplifies >> repairs"| I
+
+    T --- C
+    C --- I
+    I --- T
+
+    style AI fill:#FF8B94,stroke:#2D3436,color:#2D3436
+    style T fill:#4ECDC4,stroke:#2D3436,color:#2D3436
+    style C fill:#6C5CE7,stroke:#2D3436,color:#FFFFFF
+    style I fill:#FFE66D,stroke:#2D3436,color:#2D3436
