@@ -1,0 +1,20 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4ECDC4', 'primaryTextColor': '#2D3436', 'primaryBorderColor': '#2D3436', 'lineColor': '#6C5CE7', 'secondaryColor': '#A8E6CF', 'tertiaryColor': '#FFE66D', 'background': '#FFFFFF'}}}%%
+graph TD
+    A["🔀 PR Merges"] -->|"poll-pr detects"| B["📚 ygs-learn"]
+    B -->|"Phase 0: Health Check\nExtract & Classify"| C["📁 docs/learnings/"]
+    C -->|"loaded as context"| D["🛠️ Next ygs-implement"]
+    D -->|"opens PR"| A
+
+    E["📊 ygs-pr-audit\n(50 merged PRs)"] -->|"skill_improvements.json"| F["📝 Skill PR Created"]
+    F -->|"poll-pr watches"| G["👤 Human Reviews\nSkill PR"]
+    G -->|"review feedback"| B
+
+    C -.->|"patterns visible\nacross PRs"| E
+
+    style A fill:#4ECDC4,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style B fill:#A8E6CF,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style C fill:#A8E6CF,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style D fill:#4ECDC4,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style E fill:#6C5CE7,stroke:#2D3436,stroke-width:2px,color:#FFFFFF
+    style F fill:#6C5CE7,stroke:#2D3436,stroke-width:2px,color:#FFFFFF
+    style G fill:#FFE66D,stroke:#2D3436,stroke-width:3px,color:#2D3436
