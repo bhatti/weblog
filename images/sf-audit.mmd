@@ -1,0 +1,15 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4ECDC4', 'primaryTextColor': '#2D3436', 'primaryBorderColor': '#2D3436', 'lineColor': '#6C5CE7', 'secondaryColor': '#A8E6CF', 'tertiaryColor': '#FFE66D', 'background': '#FFFFFF'}}}%%
+graph LR
+    A["audit-prs"] --> B["plan-skill-\nupdates"]
+    B --> C["create-skill-pr"]
+    C --> D["poll-pr"]
+    D --> E["done ✅"]
+    A -->|"on failure"| F["notify-error"]
+    F --> E
+
+    style A fill:#4ECDC4,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style B fill:#4ECDC4,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style C fill:#4ECDC4,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style D fill:#6C5CE7,stroke:#2D3436,stroke-width:2px,color:#FFFFFF
+    style E fill:#A8E6CF,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style F fill:#FF6B6B,stroke:#2D3436,stroke-width:2px,color:#2D3436
