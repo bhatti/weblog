@@ -1,0 +1,14 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#4ECDC4', 'primaryTextColor': '#2D3436', 'primaryBorderColor': '#2D3436', 'lineColor': '#6C5CE7', 'secondaryColor': '#A8E6CF', 'tertiaryColor': '#FFE66D', 'background': '#FFFFFF'}}}%%
+graph LR
+    A["Phase 1\nSetup"] --> B["Phase 2\n4 Specialist\nPasses"]
+    B --> C["Phase 2.5\nDeep Review\n(security/large)"]
+    C --> D["Phase 3\nVerification\nGate"]
+    D --> E["Phase 4\nSynthesis"]
+
+    D ---|"⚠️ findings go DOWN\nnot up"| D
+
+    style A fill:#4ECDC4,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style B fill:#6C5CE7,stroke:#2D3436,stroke-width:2px,color:#FFFFFF
+    style C fill:#FF8B94,stroke:#2D3436,stroke-width:2px,color:#2D3436
+    style D fill:#FFE66D,stroke:#2D3436,stroke-width:3px,color:#2D3436
+    style E fill:#A8E6CF,stroke:#2D3436,stroke-width:2px,color:#2D3436
