@@ -1,0 +1,19 @@
+flowchart TD
+    classDef agent fill:#6C3483,stroke:#4A235A,color:#fff,font-weight:bold,font-size:14px
+    classDef danger fill:#E74C3C,stroke:#C0392B,color:#fff,font-weight:bold,font-size:14px
+    classDef warn fill:#F39C12,stroke:#D68910,color:#000,font-weight:bold,font-size:14px
+    classDef amplifier fill:#E67E22,stroke:#CA6F1E,color:#fff,font-weight:bold,font-size:14px
+
+    A["🤖 AI agents generate PRs<br/>continuously"]:::agent
+    B["⏱ THROUGHPUT bottleneck<br/>Merge queue fills faster<br/>than CI can drain it"]:::warn
+    C["🔍 QUALITY bottleneck<br/>Review capacity stays flat<br/>while PR volume triples"]:::warn
+    D["💥 COMPOUNDING EFFECT<br/>Bigger batches fail more often<br/>and failures pile into the next batch"]:::danger
+    E["🏗️ MONOREPO AMPLIFIER<br/>Full-suite CI · Fuzzy ownership<br/>Semantic merge conflicts"]:::amplifier
+    F["Main branch destabilizes<br/>— or velocity collapses"]:::danger
+
+    A --> B
+    A --> C
+    B --> D
+    C --> D
+    D --> E
+    E --> F
