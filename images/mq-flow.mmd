@@ -1,0 +1,31 @@
+flowchart TD
+    classDef intake fill:#2E86C1,stroke:#1B4F72,color:#fff,font-weight:bold,font-size:13px
+    classDef gate fill:#E74C3C,stroke:#C0392B,color:#fff,font-weight:bold,font-size:13px
+    classDef queue fill:#27AE60,stroke:#1E8449,color:#fff,font-weight:bold,font-size:13px
+    classDef learn fill:#8E44AD,stroke:#6C3483,color:#fff,font-weight:bold,font-size:13px
+    classDef human fill:#F39C12,stroke:#D68910,color:#000,font-weight:bold,font-size:13px
+
+    subgraph Intake
+        A["PR opened / ai-gh-implement completes"]:::intake --> B["ai-scope-router"]:::intake
+        B --> C["scope.json + risk_score.json"]:::intake
+    end
+    subgraph Gate
+        C --> D["ai-gate-review"]:::gate
+        D -->|"LOW risk"| E["ai-merge-ready label"]:::queue
+        D -->|"HIGH risk"| F["👤 Human reviews report — normal PR process"]:::human
+        F --> E
+    end
+    subgraph Queue["ai-merge-queue (cron)"]
+        E --> G["collect-ready"]:::queue
+        G --> H["group-by-scope → fan_out ai-mq-lane"]:::queue
+        H --> I["ai-mq-lane: speculative batch + bisect"]:::queue
+        I --> J["fast-forward merge — tested SHA only"]:::queue
+    end
+    subgraph Learn
+        J --> K["ygs-learn"]:::learn
+        K --> L["docs/learnings/"]:::learn
+        M["ygs-pr-audit + ygs-codebase-audit"]:::learn --> N["skill_improvements.json"]:::learn
+        N --> O["create-skill-pr"]:::learn
+        L -.->|"feeds next run"| B
+        O -.->|"feeds next run"| B
+    end
