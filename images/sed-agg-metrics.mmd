@@ -1,0 +1,21 @@
+flowchart TD
+    classDef ingest fill:#2196F3,stroke:#1565C0,color:white
+    classDef agg fill:#4CAF50,stroke:#2E7D32,color:white
+    classDef rollup fill:#9C27B0,stroke:#6A1B9A,color:white
+    classDef alert fill:#F44336,stroke:#C62828,color:white
+
+    I[Metric Ingester<br/>StatsD / OTLP] --> H{Hash by<br/>metric name}
+    H --> S1[Shard 1<br/>Window Agg]
+    H --> S2[Shard 2<br/>Window Agg]
+    H --> SN[Shard N<br/>Window Agg]
+    S1 --> R1[Rollup<br/>1s → 1m]
+    S2 --> R1
+    SN --> R1
+    R1 --> R2[Rollup<br/>1m → 1h]
+    R2 --> AD[Anomaly<br/>Detector]
+    AD --> A[Alert<br/>Manager]
+
+    class I ingest
+    class S1,S2,SN agg
+    class R1,R2 rollup
+    class AD,A alert
