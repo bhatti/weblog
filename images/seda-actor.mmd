@@ -1,0 +1,11 @@
+flowchart LR
+    classDef seda fill:#2196F3,stroke:#1565C0,color:white
+    classDef actor fill:#4CAF50,stroke:#2E7D32,color:white
+
+    Q[Event queue] --- M[Mailbox / Channel]
+    W[Stage workers] --- A[Actor / Shard group]
+    S[Stage state] --- AS[Actor state]
+    R[Recovery] --- J[Journal + supervision]
+
+    class Q,W,S,R seda
+    class M,A,AS,J actor
