@@ -1,0 +1,42 @@
+flowchart TB
+    classDef facet fill:#FF9800,stroke:#E65100,color:white
+    classDef behavior fill:#2196F3,stroke:#1565C0,color:white
+    classDef runtime fill:#4CAF50,stroke:#2E7D32,color:white
+    classDef transport fill:#9C27B0,stroke:#6A1B9A,color:white
+
+    subgraph Facets [Facet Stack - Priority Order]
+        F1[Security 1000+] --> F2[Logging 900]
+        F2 --> F3[Metrics 800]
+        F3 --> F4[Virtual Actor 100]
+        F4 --> F5[Durability 90]
+        F5 --> F6[Timer 50]
+    end
+
+    subgraph Behaviors [Actor Behaviors]
+        B1[GenServer] 
+        B2[GenEvent]
+        B3[FSM]
+        B4[Workflow]
+    end
+
+    subgraph Runtime [WASM Runtime + Embedded Rust]
+        R1[Python WASM]
+        R2[Go WASM]
+        R3[TypeScript WASM]
+        R4[Rust WASM / Native]
+    end
+
+    subgraph Transport [Coordination & Transport]
+        T1[Shard Groups]
+        T2[Scatter/Gather]
+        T3[TupleSpace]
+        T4[Channels]
+        T5[gRPC Cluster]
+    end
+
+    Facets --> Behaviors --> Runtime --> Transport
+
+    class F1,F2,F3,F4,F5,F6 facet
+    class B1,B2,B3,B4 behavior
+    class R1,R2,R3,R4 runtime
+    class T1,T2,T3,T4,T5 transport
