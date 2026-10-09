@@ -1,0 +1,22 @@
+flowchart LR
+    classDef source fill:#2196F3,stroke:#1565C0,color:white
+    classDef process fill:#4CAF50,stroke:#2E7D32,color:white
+    classDef route fill:#FF9800,stroke:#E65100,color:white
+    classDef sink fill:#F44336,stroke:#C62828,color:white
+
+    S[Source<br/>HTTP/Syslog] --> EB[Event<br/>Breaker]
+    EB --> R[Router]
+    R --> P1[Pipeline<br/>Worker 1]
+    R --> P2[Pipeline<br/>Worker 2]
+    R --> PN[Pipeline<br/>Worker N]
+    P1 --> SR[Sink<br/>Router]
+    P2 --> SR
+    PN --> SR
+    SR --> SK1[Splunk HEC]
+    SR --> SK2[Datadog]
+    SR --> SK3[S3 Parquet]
+
+    class S source
+    class EB,P1,P2,PN process
+    class R,SR route
+    class SK1,SK2,SK3 sink
