@@ -1,0 +1,35 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant C as Caller
+    participant L as Leader
+    participant W as Workers (N shards)
+    participant T as Tuple Space
+
+    C->>L: run(workers, batches, events_per_batch)
+    L->>W: create shard group
+
+    loop each batch round
+        L->>W: process_batch
+        W->>W: filter, enrich, transform<br/>(simulated counts)
+        W->>T: write stage_summary
+        W-->>L: event counts, bytes, top streams
+        L->>T: read stage summaries
+        L->>L: merge top streams across workers
+    end
+
+    L->>L: collect per-node and per-role stats
+    L-->>C: events/sec, timing, drop counts
