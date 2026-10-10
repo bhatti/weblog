@@ -1,0 +1,32 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant C as Caller
+    participant R as Router<br/>(cost-aware routing)
+    participant M as Model Workers (N shards)
+
+    C->>R: run(request_count, batch_size)
+    R->>M: create shard group
+    R->>R: generate requests,<br/>assign each to small / medium / large tier
+
+    loop each batch, per tier
+        R->>M: process_batch(batch, tier)
+        M->>M: simulate inference<br/>(latency, tokens, cost, ~2% failures)
+        M-->>R: tokens, cost, latencies, compute_ms
+    end
+
+    R->>R: compute req/s, tokens/s, total cost,<br/>per-tier p50/p99
+    R-->>C: final report
