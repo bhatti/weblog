@@ -1,0 +1,39 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant C as Caller
+    participant O as Orchestrator
+    participant T as Tuple Space
+    participant P as Fetcher Pool
+    participant A as Analyzer Shards
+
+    C->>O: crawl(seed_urls, max_pages, max_depth)
+    O->>T: write seed URLs to url_queue
+
+    loop BFS until max_pages or max_depth
+        O->>P: checkout fetcher
+        P-->>O: fetcher id
+        O->>P: fetch(url)
+        P-->>O: links + word counts
+        O->>P: checkin fetcher
+        O->>T: mark new links, enqueue (skip visited)
+    end
+
+    O->>A: analyze(results, interleaved across 2 shards)
+    A-->>O: top words per shard
+    O->>P: status_request to each process-group member
+    P-->>O: fetch counts per worker
+    O-->>C: pages crawled, top words, pages/sec
