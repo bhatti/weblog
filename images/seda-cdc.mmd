@@ -1,0 +1,32 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant C as Caller
+    participant L as Leader
+    participant W as Workers (N shards)
+
+    C->>L: run(event_count, batch_size)
+    L->>W: create shard group
+    L->>L: generate fake WAL events
+
+    loop each batch of events
+        L->>W: process_batch(events)
+        W->>W: skip duplicates, track LSN,<br/>transform each event for:<br/>search, analytics, cache
+        W-->>L: sink counts, table counts, compute_ms
+    end
+
+    L->>L: total per-sink and per-table counts
+    L-->>C: events/sec, timing, duplicates skipped
