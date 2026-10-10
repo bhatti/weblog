@@ -1,0 +1,32 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant C as Caller
+    participant L as Leader
+    participant W as Workers (N shards)
+
+    C->>L: run(queries, chunks_per_query, top_k)
+    L->>W: create shard group
+
+    loop each query
+        L->>W: search_chunks(query_index)
+        W->>W: fake query embedding,<br/>score chunks (dot product),<br/>keep local top-K
+        W-->>L: top-K chunk ids + scores
+        L->>L: merge candidates,<br/>sort, keep global top-K
+    end
+
+    L->>L: collect per-node and per-role stats
+    L-->>C: top chunks per query, queries/sec, timing
