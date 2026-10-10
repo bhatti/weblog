@@ -1,0 +1,33 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant C as Caller
+    participant L as Leader
+    participant W as Workers (N shards)
+
+    C->>L: run(total_images, batches, worker_count)
+    L->>W: create shard group
+    L->>W: init (shard_id, image share)
+    W-->>L: ok
+
+    loop each batch round
+        L->>W: classify (scatter to all shards)
+        W->>W: fake model pass<br/>(score per image, pick label)
+        W-->>L: predictions + timings
+    end
+
+    L->>L: merge predictions,<br/>compute efficiency & per-node stats
+    L-->>C: final report
