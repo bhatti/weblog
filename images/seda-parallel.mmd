@@ -1,0 +1,34 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant B as Benchmark
+    participant W as Inference Workers
+    participant M as Metrics Actor
+
+    Note over B,W: 1. Scatter-gather
+    B->>W: infer (to all shards)
+    W-->>B: results + latency
+
+    Note over B,W: 2. Elastic pool
+    B->>W: checkout, infer, checkin
+    W-->>B: result
+
+    Note over B,W: 3. Collectives
+    B->>W: broadcast, barrier, reduce
+    W-->>B: aggregated stats
+
+    W--)M: inference_completed (fire-and-forget)
+    B->>B: report throughput, latency, efficiency
