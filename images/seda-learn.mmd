@@ -1,0 +1,32 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#1e3a5f',
+    'actorBorder': '#60a5fa',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#e2e8f0',
+    'signalTextColor': '#ffffff',
+    'noteBkgColor': '#334155',
+    'noteTextColor': '#ffffff',
+    'noteBorderColor': '#94a3b8',
+    'background': 'transparent'
+  }
+}}%%
+sequenceDiagram
+    participant C as Caller
+    participant A as Aggregator<br/>(global model)
+    participant K as Clients (N shards)
+
+    C->>A: run(clients, rounds)
+    A->>K: create shard group
+
+    loop each round (until early stop)
+        A->>K: train_round(global weights)
+        K->>K: generate local data,<br/>train logistic regression
+        K-->>A: gradients + loss + sample count
+        A->>A: FedAvg, clip gradients,<br/>add DP noise, update model
+        A->>A: check accuracy on test data
+    end
+
+    A-->>C: final accuracy, loss, timing
