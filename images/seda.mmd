@@ -1,0 +1,22 @@
+flowchart LR
+    IN([in]):::io --> Q
+
+    subgraph STAGE["⚙️ one stage"]
+        direction LR
+        Q[queue]:::queue --> W[workers]:::workers --> S[(local state)]:::state --> E[emit / persist]:::emit
+    end
+
+    E --> OUT([out]):::io
+
+    Q -. backpressure .-> IN
+    E -. recover after crash .-> S
+
+    classDef io fill:#1e293b,stroke:#0f172a,color:#fff,stroke-width:2px
+    classDef queue fill:#ff3d81,stroke:#b8004e,color:#fff,stroke-width:2px
+    classDef workers fill:#ffb800,stroke:#b37f00,color:#111,stroke-width:2px
+    classDef state fill:#00d4ff,stroke:#0086a3,color:#111,stroke-width:2px
+    classDef emit fill:#7cff4d,stroke:#3a9e12,color:#111,stroke-width:2px
+
+    style STAGE fill:#f5f0ff,stroke:#8b5cf6,stroke-width:3px,color:#333
+    linkStyle 5 stroke:#ff3d81,stroke-width:2px
+    linkStyle 6 stroke:#8b5cf6,stroke-width:2px
