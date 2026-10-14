@@ -1,0 +1,13 @@
+flowchart TB
+    subgraph Inbound["Inbound — Protect the Receiver"]
+        RL["Rate Limiter\nToken Bucket"] --> MB["Mailbox\nBounded Queue"] --> AC["Admission Control\nIn-Flight Counter"]
+    end
+    subgraph Outbound["Outbound — Protect the Sender"]
+        OB["Outbox Relay\nDB-Backed Store-and-Forward"] --> CL["AIMD Limiter\nTCP Congestion Control"] --> PR["Partitioned Relay\nHash-Routed Scale-Out"]
+    end
+    subgraph Transient["Transient — Handle Ephemeral Data"]
+        LWW["OVERWRITE\nLast-Write-Wins"] --> DLQ["Dead Letter Queue\nPoison Messages"]
+    end
+    style Inbound fill:#2255aa,color:#fff
+    style Outbound fill:#22aa55,color:#fff
+    style Transient fill:#aa8822,color:#fff
