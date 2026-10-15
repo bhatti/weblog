@@ -1,6 +1,6 @@
 flowchart TB
     subgraph Inbound["Inbound — Protect the Receiver"]
-        RL["Rate Limiter\nToken Bucket"] --> MB["Mailbox\nBounded Queue"] --> AC["Admission Control\nIn-Flight Counter"]
+        RL["Rate Limiter\nToken Bucket"] --> MB["Bounded Mailbox\nAdmission Gate"]
     end
     subgraph Outbound["Outbound — Protect the Sender"]
         OB["Outbox Relay\nDB-Backed Store-and-Forward"] --> CL["AIMD Limiter\nTCP Congestion Control"] --> PR["Partitioned Relay\nHash-Routed Scale-Out"]
