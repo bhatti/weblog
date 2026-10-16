@@ -1,0 +1,35 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'background': '#0d1117',
+    'actorBkg': '#1f6feb',
+    'actorBorder': '#79c0ff',
+    'actorTextColor': '#ffffff',
+    'actorLineColor': '#8b949e',
+    'signalColor': '#e6edf3',
+    'signalTextColor': '#e6edf3',
+    'noteBkgColor': '#fff3b0',
+    'noteBorderColor': '#d4a72c',
+    'noteTextColor': '#1b1f24',
+    'labelBoxBkgColor': '#30363d',
+    'labelBoxBorderColor': '#8b949e',
+    'labelTextColor': '#ffffff',
+    'loopTextColor': '#e6edf3'
+  }
+}}%%
+sequenceDiagram
+    participant S as OutboxRelay
+    participant MB as Bounded Mailbox
+    participant A as Actor
+    S->>MB: tell() — enqueue message
+    alt mailbox has capacity
+        MB->>A: deliver to actor event loop
+        A->>S: Ok(())
+        Note over S: limiter.on_success() — limit += 1
+        S->>S: ack() message
+    else mailbox full
+        MB->>S: MailboxFull → DeliveryError::Capacity
+        Note over S: limiter.on_rejection() — limit /= 2
+        Note over S: nack(delay=backoff) → send_at = now + delay
+        Note over S: message invisible until send_at expires
+    end
