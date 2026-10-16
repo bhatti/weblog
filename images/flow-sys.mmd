@@ -1,0 +1,44 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'background': '#0d1117',
+    'primaryColor': '#e6edf3',
+    'primaryTextColor': '#0d1117',
+    'primaryBorderColor': '#ffffff',
+    'lineColor': '#e6edf3',
+    'textColor': '#e6edf3',
+    'edgeLabelBackground': '#0d1117',
+    'tertiaryColor': '#161b22',
+    'fontSize': '15px'
+  }
+}}%%
+flowchart TB
+    subgraph Edge["Network Edge"]
+        RL[Rate Limiter]
+    end
+    subgraph Receiver["Receiver Actor"]
+        MB["Bounded Mailbox<br/>(admission gate)"] --> Handler[Message Handler]
+    end
+    subgraph Sender["Sender / Outbox"]
+        App[Application] --> OB["Outbox Channel<br/>SQLite / Postgres"]
+        OB --> Relay[OutboxRelay]
+        Relay --> AIMD[AIMD Limiter]
+        AIMD --> PR[Partitioned Relay]
+    end
+    subgraph Safety["Safety Net"]
+        DLQ[Dead Letter Queue]
+        LWW[OVERWRITE Coalescing]
+    end
+    PR -->|deliver| RL
+    RL --> MB
+    MB -->|"MailboxFull → DeliveryError::Capacity"| AIMD
+    Relay -->|max retries exceeded| DLQ
+    App -->|transient messages| LWW
+
+    classDef node fill:#f0f6fc,stroke:#ffffff,stroke-width:1.5px,color:#0d1117;
+    class RL,MB,Handler,App,OB,Relay,AIMD,PR,DLQ,LWW node
+
+    style Edge fill:#6633cc,stroke:#d2a8ff,stroke-width:2px,color:#ffffff
+    style Receiver fill:#2255aa,stroke:#79c0ff,stroke-width:2px,color:#ffffff
+    style Sender fill:#1a7f45,stroke:#56d364,stroke-width:2px,color:#ffffff
+    style Safety fill:#9a6700,stroke:#e3b341,stroke-width:2px,color:#ffffff
